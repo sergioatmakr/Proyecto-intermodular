@@ -8,20 +8,22 @@
   'use strict';
 
   // ── Datos ──────────────────────────────────────────────────
+  // Solo colores muy definidos y fáciles de distinguir para
+  // personas con Alzheimer o deterioro cognitivo.
   const CG_COLORES = [
-    { nombre: 'Rojo',     hex: '#e63946' },
-    { nombre: 'Azul',     hex: '#457b9d' },
-    { nombre: 'Verde',    hex: '#2a9d8f' },
-    { nombre: 'Amarillo', hex: '#e9c46a' },
-    { nombre: 'Naranja',  hex: '#f4a261' },
-    { nombre: 'Morado',   hex: '#8338ec' },
-    { nombre: 'Rosa',     hex: '#e07ab1' },
-    { nombre: 'Marrón',   hex: '#8B5E3C' },
-    { nombre: 'Blanco',   hex: '#f1faee' },
-    { nombre: 'Gris',     hex: '#6d6875' },
-    { nombre: 'Turquesa', hex: '#06d6a0' },
-    { nombre: 'Lima',     hex: '#90be6d' },
+    { nombre: 'Rojo',     hex: '#d40000' },
+    { nombre: 'Azul',     hex: '#0055cc' },
+    { nombre: 'Verde',    hex: '#008a00' },
+    { nombre: 'Amarillo', hex: '#f5c800' },
+    { nombre: 'Naranja',  hex: '#e86000' },
+    { nombre: 'Morado',   hex: '#7200c8' },
+    { nombre: 'Rosa',     hex: '#e0006e' },
+    { nombre: 'Negro',    hex: '#1a1a1a' },
   ];
+
+  // Número de rondas y opciones por ronda
+  const CG_MAX_RONDAS  = 8;   // suficiente estimulación sin agotar
+  const CG_OPCIONES    = 4;   // cuadrícula 2×2, más legible
 
   const CG_TEXTOS = {
     escuchar:            'Escuchar',
@@ -31,6 +33,7 @@
     respuestasCorrectas: ['¡Correcto! 🎉', '¡Genial! ✨', '¡Exacto! 🔥', '¡Perfecto! 💯'],
     respuestasIncorrectas: ['¡Incorrecto! ❌', 'Casi… ❌', 'No era ese ❌'],
     siguienteRonda:      'Siguiente ronda →',
+    ultimaRonda:         'Ver resultado →',
   };
 
   // ── Estado ─────────────────────────────────────────────────
@@ -53,6 +56,10 @@
   const cgElRacha         = document.getElementById('cg-racha');
   const cgPantallaInicio  = document.getElementById('cg-pantalla-inicio');
   const cgBotonEmpezar    = document.getElementById('cg-boton-empezar');
+  const cgPantallaFin     = document.getElementById('cg-pantalla-fin');
+  const cgFinPuntos       = document.getElementById('cg-fin-puntos');
+  const cgFinMensaje      = document.getElementById('cg-fin-mensaje');
+  const cgBotonReiniciar  = document.getElementById('cg-boton-reiniciar');
 
   // Si algún elemento no existe (página diferente), salir sin errores
   if (!cgBotonEmpezar) return;
@@ -63,14 +70,23 @@
     cgNuevaRonda();
   });
 
+  // ── Reinicio ───────────────────────────────────────────────
+  cgBotonReiniciar.addEventListener('click', () => {
+    cgPuntos      = 0;
+    cgRondaActual = 1;
+    cgRacha       = 0;
+    cgPantallaFin.classList.add('cg-pantalla-inicio--oculta');
+    cgNuevaRonda();
+  });
+
   // ── Síntesis de voz ────────────────────────────────────────
   function cgHablar(texto, alTerminar) {
     if (!window.speechSynthesis) { alTerminar && alTerminar(); return; }
     window.speechSynthesis.cancel();
     const enunciado  = new SpeechSynthesisUtterance(texto);
     enunciado.lang   = 'es-ES';
-    enunciado.rate   = 0.85;
-    enunciado.pitch  = 1.05;
+    enunciado.rate   = 0.78;   // más lento para mejor comprensión
+    enunciado.pitch  = 1.0;
     const vozEspanol = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('es'));
     if (vozEspanol) enunciado.voice = vozEspanol;
     enunciado.onend  = alTerminar || null;
@@ -78,11 +94,11 @@
     window.speechSynthesis.speak(enunciado);
   }
 
-  // ── Elegir 6 colores aleatorios ────────────────────────────
+  // ── Elegir N colores aleatorios ────────────────────────────
   function cgElegirColores() {
     const bolsa    = [...CG_COLORES];
     const elegidos = [];
-    while (elegidos.length < 6) {
+    while (elegidos.length < CG_OPCIONES) {
       const indice = Math.floor(Math.random() * bolsa.length);
       elegidos.push(bolsa.splice(indice, 1)[0]);
     }
@@ -147,7 +163,12 @@
     cgActualizarEstadisticas();
     cgBotonEscuchar.disabled       = true;
     cgBotonSiguiente.style.display = 'block';
-    cgBotonSiguiente.textContent   = CG_TEXTOS.siguienteRonda;
+
+    // Última ronda: cambiar texto del botón
+    const esUltima = cgRondaActual >= CG_MAX_RONDAS;
+    cgBotonSiguiente.textContent = esUltima
+      ? CG_TEXTOS.ultimaRonda
+      : CG_TEXTOS.siguienteRonda;
   }
 
   // ── Banner de resultado ────────────────────────────────────
@@ -164,9 +185,28 @@
   // ── Actualizar marcadores ──────────────────────────────────
   function cgActualizarEstadisticas() {
     cgElPuntos.textContent = cgPuntos;
-    cgElRonda.textContent  = cgRondaActual;
+    cgElRonda.textContent  = `${cgRondaActual} / ${CG_MAX_RONDAS}`;
     cgElRacha.textContent  = cgRacha;
     cgElRacha.classList.toggle('cg-estadistica__valor--racha-fuego', cgRacha >= 3);
+  }
+
+  // ── Pantalla de fin ────────────────────────────────────────
+  function cgMostrarFin() {
+    const maxPuntos = CG_MAX_RONDAS * 15;
+    const porcentaje = Math.round((cgPuntos / maxPuntos) * 100);
+
+    let mensaje;
+    if (porcentaje >= 80) {
+      mensaje = '¡Excelente trabajo! 🏆 Tu memoria es fantástica.';
+    } else if (porcentaje >= 50) {
+      mensaje = '¡Muy bien! 👏 Sigue practicando cada día.';
+    } else {
+      mensaje = '¡Buen intento! 💪 Con práctica mejorarás.';
+    }
+
+    cgFinPuntos.textContent = cgPuntos;
+    cgFinMensaje.textContent = mensaje;
+    cgPantallaFin.classList.remove('cg-pantalla-inicio--oculta');
   }
 
   // ── Nueva ronda ────────────────────────────────────────────
@@ -214,8 +254,12 @@
 
   // ── Botón siguiente ────────────────────────────────────────
   cgBotonSiguiente.addEventListener('click', () => {
-    cgRondaActual++;
-    cgNuevaRonda();
+    if (cgRondaActual >= CG_MAX_RONDAS) {
+      cgMostrarFin();
+    } else {
+      cgRondaActual++;
+      cgNuevaRonda();
+    }
   });
 
   // Precargar voces del navegador

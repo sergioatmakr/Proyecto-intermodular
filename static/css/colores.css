@@ -22,7 +22,7 @@ body.cg-pagina-juego {
 /* ── Área principal: ocupa exactamente el espacio entre header y footer ── */
 .cg-area {
   flex: 1;
-  min-height: 0;           /* impide que desborde el flex padre */
+  min-height: 0;
   background: var(--cg-fondo);
   display: flex;
   flex-direction: column;
@@ -96,6 +96,11 @@ body.cg-pagina-juego {
   color: var(--cg-texto);
 }
 
+/* Ronda con barra de progreso implícita: fuente más pequeña para "X / 8" */
+#cg-ronda {
+  font-size: clamp(1.1rem, 2.4vh, 1.5rem);
+}
+
 .cg-estadistica__etiqueta {
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -137,13 +142,13 @@ body.cg-pagina-juego {
   border-radius: 50px;
   color: white;
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(0.95rem, 2.2vh, 1.1rem);
+  font-size: clamp(1.05rem, 2.4vh, 1.25rem);
   letter-spacing: 0.5px;
-  padding: clamp(11px, 1.8vh, 15px) clamp(24px, 3vw, 34px);
+  padding: clamp(13px, 2vh, 18px) clamp(28px, 4vw, 40px);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
   box-shadow: 0 4px 20px var(--cg-resplandor);
   position: relative;
@@ -160,7 +165,7 @@ body.cg-pagina-juego {
 }
 
 /* ── Icono altavoz y onda ────────────────────────────────── */
-.cg-icono-altavoz { font-size: 1.1rem; }
+.cg-icono-altavoz { font-size: 1.2rem; }
 
 .cg-onda { display: flex; align-items: center; gap: 3px; height: 16px; }
 .cg-onda__barra {
@@ -185,28 +190,28 @@ body.cg-pagina-juego {
 
 /* ── Instrucción ─────────────────────────────────────────── */
 .cg-instruccion {
-  font-size: clamp(0.88rem, 1.9vh, 1rem);
+  font-size: clamp(0.95rem, 2vh, 1.1rem);
   color: var(--cg-subtexto);
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   min-height: 16px;
   line-height: 1.3;
 }
 
-/* ── Cuadrícula de colores ───────────────────────────────── */
+/* ── Cuadrícula de colores: 2×2 para mayor claridad ─────── */
 .cg-cuadricula {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(6px, 1vh, 12px);
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(10px, 1.6vh, 18px);
   width: 100%;
 }
 
-/* Los cuadrados no usan aspect-ratio sino una altura fija basada
-   en el viewport para garantizar que todo quepa sin scroll.    */
+/* Cuadrados más grandes y con borde visible para facilitar
+   la selección a personas con problemas de visión o motricidad. */
 .cg-boton-color {
-  height: clamp(80px, 13.5vh, 130px);
-  border-radius: 12px;
-  border: 3px solid transparent;
+  height: clamp(100px, 18vh, 160px);
+  border-radius: 14px;
+  border: 4px solid rgba(255,255,255,0.15);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -220,20 +225,20 @@ body.cg-pagina-juego {
   background: rgba(255,255,255,0);
   transition: background 0.15s;
 }
-.cg-boton-color:hover:not(:disabled)::after { background: rgba(255,255,255,0.12); }
-.cg-boton-color:hover:not(:disabled) { transform: scale(1.06); box-shadow: 0 6px 24px rgba(0,0,0,0.4); }
+.cg-boton-color:hover:not(:disabled)::after { background: rgba(255,255,255,0.14); }
+.cg-boton-color:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
 .cg-boton-color:active:not(:disabled) { transform: scale(0.97); }
 .cg-boton-color:disabled { cursor: not-allowed; }
 
 /* Estados de feedback */
-.cg-boton-color--correcto   { border-color: #06d6a0; box-shadow: 0 0 0 4px rgba(6,214,160,0.35);  animation: cg-pop-correcto 0.4s cubic-bezier(0.36,0.07,0.19,0.97); }
-.cg-boton-color--incorrecto { border-color: #ff4757; box-shadow: 0 0 0 4px rgba(255,71,87,0.35);   animation: cg-sacudida 0.4s cubic-bezier(0.36,0.07,0.19,0.97); }
-.cg-boton-color--revelar    { border-color: #06d6a0; opacity: 0.5; }
+.cg-boton-color--correcto   { border-color: #06d6a0; border-width: 5px; box-shadow: 0 0 0 4px rgba(6,214,160,0.4);  animation: cg-pop-correcto 0.4s cubic-bezier(0.36,0.07,0.19,0.97); }
+.cg-boton-color--incorrecto { border-color: #ff4757; border-width: 5px; box-shadow: 0 0 0 4px rgba(255,71,87,0.4);   animation: cg-sacudida 0.4s cubic-bezier(0.36,0.07,0.19,0.97); }
+.cg-boton-color--revelar    { border-color: #06d6a0; border-width: 5px; opacity: 0.6; }
 
 @keyframes cg-pop-correcto {
   0%   { transform: scale(1); }
-  40%  { transform: scale(1.15); }
-  70%  { transform: scale(0.96); }
+  40%  { transform: scale(1.12); }
+  70%  { transform: scale(0.97); }
   100% { transform: scale(1); }
 }
 @keyframes cg-sacudida {
@@ -244,18 +249,19 @@ body.cg-pagina-juego {
   80%     { transform: translateX(5px); }
 }
 
-/* Icono ✓ / ✗ dentro del cuadrado */
+/* Icono ✓ / ✗ dentro del cuadrado — más grande para mejor visibilidad */
 .cg-boton-color__icono {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.2rem, 2.5vh, 2rem);
+  font-size: clamp(1.8rem, 4vh, 3rem);
+  font-weight: 900;
   opacity: 0;
   transition: opacity 0.2s;
   z-index: 2;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
 }
 .cg-boton-color--correcto   .cg-boton-color__icono,
 .cg-boton-color--incorrecto .cg-boton-color__icono,
@@ -263,12 +269,12 @@ body.cg-pagina-juego {
 
 /* ── Banner de resultado ─────────────────────────────────── */
 .cg-banner-respuesta {
-  height: clamp(28px, 4vh, 40px);
+  height: clamp(30px, 4.5vh, 44px);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(1.05rem, 2.2vh, 1.35rem);
+  font-size: clamp(1.1rem, 2.4vh, 1.45rem);
   letter-spacing: 0.5px;
   opacity: 0;
   transform: translateY(6px);
@@ -286,8 +292,8 @@ body.cg-pagina-juego {
   color: var(--cg-texto);
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
-  font-size: clamp(0.88rem, 1.8vh, 1rem);
-  padding: clamp(9px, 1.4vh, 13px) 28px;
+  font-size: clamp(0.95rem, 1.9vh, 1.1rem);
+  padding: clamp(10px, 1.5vh, 14px) 32px;
   cursor: pointer;
   letter-spacing: 0.5px;
   transition: border-color 0.2s, background 0.2s, transform 0.15s;
@@ -324,10 +330,10 @@ body.cg-pagina-juego {
 
 .cg-pantalla-inicio__subtitulo {
   color: var(--cg-subtexto);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   text-align: center;
-  max-width: 300px;
+  max-width: 320px;
   line-height: 1.6;
   padding: 0 20px;
 }
@@ -347,18 +353,84 @@ body.cg-pagina-juego {
 }
 .cg-pantalla-inicio__boton:hover { transform: translateY(-3px); box-shadow: 0 8px 32px var(--cg-resplandor); }
 
+/* ── Pantalla de fin de juego ────────────────────────────── */
+.cg-pantalla-fin {
+  position: absolute;
+  inset: 0;
+  background: var(--cg-fondo);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  z-index: 10;
+  transition: opacity 0.5s;
+}
+
+.cg-fin__titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 6vw, 3rem);
+  text-align: center;
+  background: linear-gradient(135deg, #ffd166, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 0 20px;
+}
+
+.cg-fin__puntos-label {
+  color: var(--cg-subtexto);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.cg-fin__puntos {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(3.5rem, 10vw, 5rem);
+  line-height: 1;
+  color: #ffd166;
+  text-shadow: 0 0 40px rgba(255,209,102,0.4);
+}
+
+.cg-fin__mensaje {
+  color: var(--cg-texto);
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-weight: 700;
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.5;
+  padding: 0 20px;
+}
+
+.cg-fin__boton {
+  background: linear-gradient(135deg, #06d6a0, #0aa07a);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem;
+  padding: 14px 44px;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(6,214,160,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.5px;
+}
+.cg-fin__boton:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(6,214,160,0.45); }
+
 /* ── Responsive pantallas pequeñas ──────────────────────────
    Por debajo de 600px de alto (móviles en landscape, etc.)   */
 @media (max-height: 600px) {
-  .cg-titulo          { display: none; } /* sacrifica el título si no hay espacio */
+  .cg-titulo          { display: none; }
   .cg-area            { padding: 0.3rem 1rem; }
   .cg-contenedor      { gap: 6px; }
   .cg-tarjeta-juego   { gap: 6px; padding: 10px 12px; }
-  .cg-boton-color     { height: 52px; }
+  .cg-boton-color     { height: 60px; }
 }
 
 @media (max-width: 420px) {
-  .cg-cuadricula      { gap: 6px; }
+  .cg-cuadricula      { gap: 8px; }
   .cg-tarjeta-juego   { padding: 12px 10px; }
   .cg-estadisticas    { gap: 10px; padding: 7px 14px; }
 }

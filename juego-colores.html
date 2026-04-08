@@ -31,9 +31,19 @@
     <div class="cg-pantalla-inicio" id="cg-pantalla-inicio">
       <div class="cg-pantalla-inicio__titulo">🎨 ¿Qué Color<br>Escuchas?</div>
       <div class="cg-pantalla-inicio__subtitulo">
-        Escucha el color que se anuncia y haz clic en el cuadrado correcto.
+        Escucha el color que se anuncia y haz clic en el cuadrado correcto.<br>
+        <strong>8 rondas</strong> · 4 colores por ronda.
       </div>
       <button class="cg-pantalla-inicio__boton" id="cg-boton-empezar">¡Empezar!</button>
+    </div>
+
+    <!-- Pantalla de fin de juego (overlay dentro del área) -->
+    <div class="cg-pantalla-fin cg-pantalla-inicio--oculta" id="cg-pantalla-fin">
+      <div class="cg-fin__titulo">🏁 ¡Juego terminado!</div>
+      <p class="cg-fin__puntos-label">Puntuación final</p>
+      <div class="cg-fin__puntos" id="cg-fin-puntos">0</div>
+      <p class="cg-fin__mensaje" id="cg-fin-mensaje"></p>
+      <button class="cg-fin__boton" id="cg-boton-reiniciar">🔄 Jugar de nuevo</button>
     </div>
 
     <!-- Contenido del juego -->
@@ -48,7 +58,7 @@
         </div>
         <div class="cg-estadistica-separador"></div>
         <div class="cg-estadistica">
-          <span class="cg-estadistica__valor" id="cg-ronda">1</span>
+          <span class="cg-estadistica__valor" id="cg-ronda">1 / 8</span>
           <span class="cg-estadistica__etiqueta">Ronda</span>
         </div>
         <div class="cg-estadistica-separador"></div>
