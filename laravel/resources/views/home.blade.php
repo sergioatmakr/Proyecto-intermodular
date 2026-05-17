@@ -28,7 +28,17 @@
 
   --}}
   <section class="actividades">
-    {{-- Las tarjetas de los juegos se añaden aquí. --}}
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <span class="card-tag">Estrategia</span>
+      <h2>Tres en Raya</h2>
+      <p>Juega contra la máquina al clásico tres en raya. Ideal para una partida rápida.</p>
+      <div class="card-meta">
+        <span>⏱ ~2 min</span>
+        <span>⭐ Nivel básico</span>
+      </div>
+      <a href="{{ route('juego.tres-raya') }}" class="btn btn-verde">Empezar <span>→</span></a>
+    </div>
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->
