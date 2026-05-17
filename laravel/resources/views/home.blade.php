@@ -88,6 +88,18 @@
       </div>
       <a href="{{ route('juego.imagenes') }}" class="btn btn-naranja">Empezar <span>→</span></a>
     </div>
+
+    <div class="card">
+      <div class="card-icon">🔤</div>
+      <span class="card-tag">Lenguaje</span>
+      <h2>Sopa de Letras</h2>
+      <p>Encuentra palabras escondidas entre las letras. Personaliza la lista con tus propias palabras.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Adaptable</span>
+      </div>
+      <a href="{{ route('juego.sopa') }}" class="btn btn-naranja">Empezar <span>→</span></a>
+    </div>
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->

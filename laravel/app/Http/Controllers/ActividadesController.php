@@ -72,6 +72,16 @@ class ActividadesController extends Controller
                 'ruta'        => route('juego.puzzle'),
                 'btn_clase'   => 'btn-naranja',
             ],
+            [
+                'icono'       => '🔤',
+                'tag'         => 'Lenguaje',
+                'titulo'      => 'Sopa de Letras',
+                'descripcion' => 'Encuentra palabras escondidas entre las letras. Personaliza la lista con tus propias palabras.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Adaptable',
+                'ruta'        => route('juego.sopa'),
+                'btn_clase'   => 'btn-naranja',
+            ],
         ];
 
         return view('actividades', compact('actividades'));
