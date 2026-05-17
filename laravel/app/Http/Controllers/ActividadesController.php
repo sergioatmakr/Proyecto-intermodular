@@ -62,6 +62,16 @@ class ActividadesController extends Controller
                 'ruta'        => route('juego.imagenes'),
                 'btn_clase'   => 'btn-naranja',
             ],
+            [
+                'icono'       => '🧩',
+                'tag'         => 'Espacial',
+                'titulo'      => 'Puzzle',
+                'descripcion' => 'Arma rompecabezas con tus propias fotos. Elige 6, 9 o 12 piezas según la dificultad.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Adaptable',
+                'ruta'        => route('juego.puzzle'),
+                'btn_clase'   => 'btn-naranja',
+            ],
         ];
 
         return view('actividades', compact('actividades'));
