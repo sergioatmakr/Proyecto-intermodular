@@ -82,6 +82,16 @@ class ActividadesController extends Controller
                 'ruta'        => route('juego.sopa'),
                 'btn_clase'   => 'btn-naranja',
             ],
+            [
+                'icono'       => '📋',
+                'tag'         => 'Secuenciación',
+                'titulo'      => 'Secuencias de Tareas',
+                'descripcion' => 'Aprende a hacer tareas paso a paso con pictogramas. Crea tus propias secuencias usando ARASAAC.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Nivel básico',
+                'ruta'        => route('juego.secuencias'),
+                'btn_clase'   => 'btn-verde',
+            ]
         ];
 
         return view('actividades', compact('actividades'));
