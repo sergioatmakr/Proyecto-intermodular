@@ -22,7 +22,16 @@ class ActividadesController extends Controller
     public function index()
     {
         $actividades = [
-            // Añade aquí la tarjeta de tu juego.
+            [
+                'icono'       => '🎯',
+                'tag'         => 'Estrategia',
+                'titulo'      => 'Tres en Raya',
+                'descripcion' => 'Juega contra la máquina al clásico tres en raya. Ideal para una partida rápida.',
+                'tiempo'      => '~2 min',
+                'nivel'       => 'Nivel básico',
+                'ruta'        => route('juego.tres-raya'),
+                'btn_clase'   => 'btn-verde',
+            ],
         ];
 
         return view('actividades', compact('actividades'));
