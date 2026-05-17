@@ -12,32 +12,23 @@
   </section>
 
   <!-- ACTIVIDADES -->
+  {{-- Cuando añadáis un juego, copiad esta plantilla de tarjeta dentro de la sección:
+
+  <div class="card">
+    <div class="card-icon">🎨</div>
+    <span class="card-tag">Categoría</span>
+    <h2>Nombre del juego</h2>
+    <p>Descripción corta del juego.</p>
+    <div class="card-meta">
+      <span>⏱ ~5 min</span>
+      <span>⭐ Nivel básico</span>
+    </div>
+    <a href="{{ route('juego.slug') }}" class="btn btn-naranja">Empezar <span>→</span></a>
+  </div>
+
+  --}}
   <section class="actividades">
-
-    <div class="card">
-      <div class="card-icon">🎨</div>
-      <span class="card-tag">Visual</span>
-      <h2>Reconocimiento de Colores</h2>
-      <p>Identifica colores, asocia nombres y entrena la percepción visual con ejercicios progresivos y divertidos.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.colores') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">🔢</div>
-      <span class="card-tag">Lógica</span>
-      <h2>Operaciones Matemáticas</h2>
-      <p>Resuelve sumas, restas y más. Ejercita el razonamiento numérico con retos adaptados a tu ritmo.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.matematicas') }}" class="btn btn-verde">Empezar <span>→</span></a>
-    </div>
-
+    {{-- Las tarjetas de los juegos se añaden aquí. --}}
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->
