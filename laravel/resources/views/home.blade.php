@@ -52,6 +52,19 @@
       </div>
       <a href="{{ route('juego.tres-raya') }}" class="btn btn-verde">Empezar <span>→</span></a>
     </div>
+
+    <div class="card">
+      <div class="card-icon">🧩</div>
+      <span class="card-tag">Espacial</span>
+      <h2>Puzzle</h2>
+      <p>Arma rompecabezas con tus propias fotos. Elige 6, 9 o 12 piezas según la dificultad.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Adaptable</span>
+      </div>
+      <a href="{{ route('juego.puzzle') }}" class="btn btn-naranja">Empezar <span>→</span></a>
+    </div>
+    
     <div class="card">
       <div class="card-icon">🔢</div>
       <span class="card-tag">Lógica</span>
