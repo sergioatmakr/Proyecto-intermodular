@@ -26,7 +26,7 @@ Route::get('/actividades',  [ActividadesController::class, 'index'])->name('acti
 Route::get('/progreso',     [ProgresoController::class,    'index'])->name('progreso');
 Route::get('/juego/tres-raya', [TresRayaController::class, 'index'])->name('juego.tres-raya');
 Route::get('/juego/colores', [ColoresController::class, 'index'])->name('juego.colores');
-
+Route::get('/juego/matematicas', [MatematicasController::class, 'index'])->name('juego.matematicas');
 // ── Juegos ──────────────────────────────────────────────────
 // Añade aquí la ruta de tu juego cuando lo desarrolles.
 // Ejemplo:
