@@ -28,6 +28,19 @@
 
   --}}
   <section class="actividades">
+
+    <div class="card">
+      <div class="card-icon">🎨</div>
+      <span class="card-tag">Visual</span>
+      <h2>Reconocimiento de Colores</h2>
+      <p>Identifica colores, asocia nombres y entrena la percepción visual con ejercicios progresivos y divertidos.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Nivel básico</span>
+      </div>
+      <a href="{{ route('juego.colores') }}" class="btn btn-naranja">Empezar <span>→</span></a>
+    </div>
+
     <div class="card">
       <div class="card-icon">🎯</div>
       <span class="card-tag">Estrategia</span>
@@ -49,6 +62,18 @@
         <span>⭐ Nivel básico</span>
       </div>
       <a href="{{ route('juego.matematicas') }}" class="btn btn-verde">Empezar <span>→</span></a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🖼️</div>
+      <span class="card-tag">Visual</span>
+      <h2>Reconocimiento de Imágenes</h2>
+      <p>Lee la palabra y selecciona la imagen correcta. Personaliza los temas y añade tus propias imágenes.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Nivel básico</span>
+      </div>
+      <a href="{{ route('juego.imagenes') }}" class="btn btn-naranja">Empezar <span>→</span></a>
     </div>
   </section>
 

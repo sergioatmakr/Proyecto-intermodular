@@ -52,6 +52,16 @@ class ActividadesController extends Controller
                 'ruta'        => route('juego.matematicas'),
                 'btn_clase'   => 'btn-verde',
             ],
+            [
+                'icono'       => '🖼️',
+                'tag'         => 'Visual',
+                'titulo'      => 'Reconocimiento de Imágenes',
+                'descripcion' => 'Lee la palabra y selecciona la imagen correcta. Personaliza los temas y añade tus propias imágenes.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Nivel básico',
+                'ruta'        => route('juego.imagenes'),
+                'btn_clase'   => 'btn-naranja',
+            ],
         ];
 
         return view('actividades', compact('actividades'));
