@@ -42,6 +42,16 @@ class ActividadesController extends Controller
                 'ruta'        => route('juego.colores'),
                 'btn_clase'   => 'btn-naranja',
             ],
+            [
+                'icono'       => '🔢',
+                'tag'         => 'Lógica',
+                'titulo'      => 'Operaciones Matemáticas',
+                'descripcion' => 'Resuelve sumas, restas y más. Ejercita el razonamiento numérico con retos adaptados a tu ritmo.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Nivel básico',
+                'ruta'        => route('juego.matematicas'),
+                'btn_clase'   => 'btn-verde',
+            ],
         ];
 
         return view('actividades', compact('actividades'));

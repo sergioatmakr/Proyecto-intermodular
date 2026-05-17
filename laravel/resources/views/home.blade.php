@@ -39,6 +39,17 @@
       </div>
       <a href="{{ route('juego.tres-raya') }}" class="btn btn-verde">Empezar <span>→</span></a>
     </div>
+    <div class="card">
+      <div class="card-icon">🔢</div>
+      <span class="card-tag">Lógica</span>
+      <h2>Operaciones Matemáticas</h2>
+      <p>Resuelve sumas, restas y más. Ejercita el razonamiento numérico con retos adaptados a tu ritmo.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Nivel básico</span>
+      </div>
+      <a href="{{ route('juego.matematicas') }}" class="btn btn-verde">Empezar <span>→</span></a>
+    </div>
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->
