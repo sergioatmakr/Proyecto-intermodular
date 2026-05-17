@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ActividadesController;
 use App\Http\Controllers\ProgresoController;
 use App\Http\Controllers\Games\TresRayaController;
+use App\Http\Controllers\Games\ColoresController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::get('/',             [HomeController::class,        'index'])->name('home
 Route::get('/actividades',  [ActividadesController::class, 'index'])->name('actividades');
 Route::get('/progreso',     [ProgresoController::class,    'index'])->name('progreso');
 Route::get('/juego/tres-raya', [TresRayaController::class, 'index'])->name('juego.tres-raya');
+Route::get('/juego/colores', [ColoresController::class, 'index'])->name('juego.colores');
 
 // ── Juegos ──────────────────────────────────────────────────
 // Añade aquí la ruta de tu juego cuando lo desarrolles.
