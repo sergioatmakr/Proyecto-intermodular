@@ -1,0 +1,16 @@
+# Cuando alguien entra a la raíz del proyecto (sin "/public/" en la URL),
+# le redirige físicamente al navegador a /<misma-ruta>/public/.
+#
+# Usa %{REQUEST_URI} para construir la URL nueva basándose en la URL pedida
+# (no en el path del disco), lo que lo hace portable a cualquier ubicación.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # No redirigir si la URL ya apunta a /public/ (evita bucles)
+    RewriteCond %{REQUEST_URI} !/public
+    # Captura el path actual sin trailing slash (si lo trae)
+    RewriteCond %{REQUEST_URI} ^(.*?)/?$
+    # Redirige al navegador a la misma URL con /public/ añadido
+    RewriteRule .* %1/public/ [R=302,L]
+</IfModule>

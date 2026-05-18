@@ -88,6 +88,30 @@
       </div>
       <a href="{{ route('juego.imagenes') }}" class="btn btn-naranja">Empezar <span>→</span></a>
     </div>
+
+    <div class="card">
+      <div class="card-icon">🔤</div>
+      <span class="card-tag">Lenguaje</span>
+      <h2>Sopa de Letras</h2>
+      <p>Encuentra palabras escondidas entre las letras. Personaliza la lista con tus propias palabras.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Adaptable</span>
+      </div>
+      <a href="{{ route('juego.sopa') }}" class="btn btn-naranja">Empezar <span>→</span></a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <span class="card-tag">Secuenciación</span>
+      <h2>Secuencias de Tareas</h2>
+      <p>Aprende a hacer tareas paso a paso con pictogramas. Crea tus propias secuencias usando ARASAAC.</p>
+      <div class="card-meta">
+        <span>⏱ ~5 min</span>
+        <span>⭐ Nivel básico</span>
+      </div>
+      <a href="{{ route('juego.secuencias') }}" class="btn btn-verde">Empezar <span>→</span></a>
+    </div>
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->

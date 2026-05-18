@@ -1,0 +1,482 @@
+/* ============================================================
+   sopa.css — Juego "Sopa de Letras"
+   Prefijo "sp-" para no chocar.
+   ============================================================ */
+
+:root {
+  --sp-fondo:        #0f0e17;
+  --sp-tarjeta:      #211f35;
+  --sp-grid-bg:      #1a1830;
+  --sp-celda-bg:     #2d2b45;
+  --sp-texto:        #fffffe;
+  --sp-subtexto:     #a7a9be;
+  --sp-acento:       #ffd166;
+  --sp-acento-2:     #6b9eff;
+  --sp-encontrada:   #06d6a0;
+}
+
+body.sp-pagina { height: 100vh; overflow: hidden; }
+
+.sp-area {
+  flex: 1;
+  min-height: 0;
+  background: var(--sp-fondo);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  overflow-y: auto;
+  padding: clamp(1rem, 2.5vh, 2rem) 1rem;
+}
+
+.sp-area::before,
+.sp-area::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.16;
+  pointer-events: none;
+}
+.sp-area::before { width: 460px; height: 460px; background: #ffd166; top: -160px; right: -160px; }
+.sp-area::after  { width: 380px; height: 380px; background: #6b9eff; bottom: -120px; left: -120px; }
+
+.sp-oculta { display: none !important; }
+
+/* ── Contenedor común ─────────────────────────────────── */
+.sp-contenedor {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 640px;
+  padding-bottom: 30px;
+}
+.sp-contenedor--juego { max-width: 980px; }
+
+.sp-pantalla-config,
+.sp-pantalla-juego,
+.sp-pantalla-victoria {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Títulos ──────────────────────────────────────────── */
+.sp-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  text-align: center;
+  background: linear-gradient(135deg, #ffd166, #ff6b6b, #6b9eff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.sp-subtitulo {
+  color: var(--sp-subtexto);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: -10px;
+}
+
+/* ── Acciones rápidas ─────────────────────────────────── */
+.sp-acciones-rapidas {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sp-btn-mini {
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 50px;
+  color: var(--sp-texto);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sp-btn-mini:hover { background: rgba(255,255,255,0.13); }
+
+/* ── Lista de palabras (configuración) ────────────────── */
+.sp-palabras-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.sp-palabra-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.sp-palabra-item:hover { border-color: rgba(255,209,102,0.4); }
+.sp-palabra-item--activa {
+  border-color: var(--sp-acento);
+  background: rgba(255,209,102,0.12);
+}
+
+.sp-palabra-item__check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-fondo);
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.sp-palabra-item--activa .sp-palabra-item__check {
+  background: var(--sp-acento);
+  border-color: var(--sp-acento);
+}
+.sp-palabra-item--activa .sp-palabra-item__check::before { content: '✓'; }
+
+.sp-palabra-item__texto {
+  flex: 1;
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--sp-texto);
+  letter-spacing: 0.5px;
+}
+
+.sp-palabra-item__borrar {
+  background: transparent;
+  border: none;
+  color: var(--sp-subtexto);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.sp-palabra-item:hover .sp-palabra-item__borrar { opacity: 1; }
+.sp-palabra-item__borrar:hover { color: #ff4757; }
+
+/* ── Añadir palabra ───────────────────────────────────── */
+.sp-añadir {
+  display: flex;
+  gap: 10px;
+}
+
+.sp-input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: var(--sp-texto);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: border-color 0.15s;
+}
+.sp-input:focus { border-color: var(--sp-acento); }
+.sp-input::placeholder { color: var(--sp-subtexto); opacity: 0.6; }
+
+.sp-btn-añadir {
+  background: linear-gradient(135deg, #6b9eff, #4e6ef5);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+.sp-btn-añadir:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(107,159,255,0.4); }
+
+.sp-añadir-hint {
+  color: var(--sp-subtexto);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-top: -10px;
+}
+
+/* ── Pie de configuración ─────────────────────────────── */
+.sp-config-pie {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.sp-contador {
+  color: var(--sp-subtexto);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.sp-btn-jugar {
+  background: linear-gradient(135deg, #ffd166, #f5a623);
+  border: none;
+  border-radius: 50px;
+  color: #2a2843;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  padding: 14px 44px;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(255,209,102,0.35);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+}
+.sp-btn-jugar:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(255,209,102,0.5); }
+.sp-btn-jugar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Cabecera del juego ──────────────────────────────── */
+.sp-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sp-btn-volver {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 50px;
+  color: var(--sp-texto);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+.sp-btn-volver:hover { background: rgba(255,255,255,0.14); }
+
+.sp-stats {
+  display: flex;
+  gap: 16px;
+  background: var(--sp-tarjeta);
+  border-radius: 50px;
+  padding: 8px 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.sp-stat {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.95rem;
+  color: var(--sp-texto);
+}
+
+/* ── Cuerpo del juego ─────────────────────────────────── */
+.sp-juego-cuerpo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: start;
+}
+@media (min-width: 820px) {
+  .sp-juego-cuerpo { grid-template-columns: 1.2fr 1fr; }
+}
+
+/* ── Grid de letras ───────────────────────────────────── */
+.sp-grid {
+  display: grid;
+  /* grid-template-columns y aspect-ratio se setean desde JS */
+  gap: 2px;
+  padding: 8px;
+  background: var(--sp-grid-bg);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  width: 100%;
+  user-select: none;
+  touch-action: none;  /* clave para que pointer events funcionen en touch */
+}
+
+.sp-celda {
+  background: var(--sp-celda-bg);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: clamp(0.85rem, 2.2vw, 1.15rem);
+  color: var(--sp-texto);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.1s, color 0.1s, transform 0.1s;
+  aspect-ratio: 1;
+}
+.sp-celda:hover { background: rgba(255,255,255,0.1); }
+
+/* Selección en curso */
+.sp-celda--seleccionada {
+  background: rgba(107,159,255,0.45);
+  color: white;
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+/* Palabra ya encontrada (estado permanente) */
+.sp-celda--encontrada {
+  background: rgba(6,214,160,0.4);
+  color: white;
+}
+.sp-celda--encontrada.sp-celda--seleccionada {
+  background: rgba(107,159,255,0.55);
+}
+
+/* ── Lista objetivo (palabras a encontrar) ────────────── */
+.sp-objetivo {
+  background: var(--sp-tarjeta);
+  border-radius: 12px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-objetivo__titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.95rem;
+  color: var(--sp-subtexto);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.sp-objetivo__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.sp-objetivo__palabra {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--sp-texto);
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.sp-objetivo__palabra--encontrada {
+  color: var(--sp-encontrada);
+  background: rgba(6,214,160,0.12);
+  text-decoration: line-through;
+  text-decoration-color: var(--sp-encontrada);
+  text-decoration-thickness: 2px;
+}
+
+/* ── Pantalla de victoria ─────────────────────────────── */
+.sp-victoria-card {
+  background: var(--sp-tarjeta);
+  border-radius: 22px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.sp-victoria-emoji { font-size: 4rem; line-height: 1; }
+
+.sp-victoria-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  text-align: center;
+  background: linear-gradient(135deg, #06d6a0, #ffd166);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sp-victoria-stats {
+  display: flex;
+  gap: 28px;
+}
+
+.sp-victoria-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sp-victoria-stat__valor {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: var(--sp-acento);
+}
+
+.sp-victoria-stat__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--sp-subtexto);
+  font-weight: 800;
+}
+
+.sp-victoria-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.sp-btn-primario,
+.sp-btn-secundario {
+  border: none;
+  border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.sp-btn-primario {
+  background: linear-gradient(135deg, #ffd166, #f5a623);
+  color: #2a2843;
+  box-shadow: 0 4px 20px rgba(255,209,102,0.35);
+}
+.sp-btn-primario:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,209,102,0.5); }
+.sp-btn-secundario {
+  background: transparent;
+  color: var(--sp-texto);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+.sp-btn-secundario:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
+/* Responsive */
+@media (max-width: 500px) {
+  .sp-palabras-lista { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .sp-stats { gap: 8px; padding: 6px 14px; font-size: 0.82rem; }
+}
