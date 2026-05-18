@@ -43,36 +43,38 @@
     </div>
 
     <div class="mg-operacion-container">
-      <div class="mg-pregunta" id="mg-pregunta">0 + 0</div>
-      <button id="mg-btnSiguiente" class="cg-boton-siguiente" style="display:none">Siguiente →</button>
+      <div class="mg-ecuacion">
+        <span class="mg-pregunta" id="mg-pregunta">0 + 0</span>
+        <span class="mg-igual">=</span>
+        <input type="text" id="mg-input" class="mg-input-resultado" readonly placeholder="?">
+      </div>
+      <button id="mg-btn-siguiente" class="cg-boton-siguiente" onclick="mgSiguiente()" style="display:none; margin-top: 15px;">
+        Siguiente ronda →
+      </button>
     </div>
   </div>
 
   <!-- Teclado de respuesta -->
   <div class="mg-tarjeta-juego">
     <div class="mg-display-respuesta">
-      <input type="text" id="mg-input" class="mg-input-resultado" readonly placeholder="?">
 
       <div class="mg-teclado">
-        <button class="mg-tecla" onclick="mgEscribir(1)">1</button>
-        <button class="mg-tecla" onclick="mgEscribir(2)">2</button>
-        <button class="mg-tecla" onclick="mgEscribir(3)">3</button>
-        <button class="mg-tecla" onclick="mgEscribir(4)">4</button>
-        <button class="mg-tecla" onclick="mgEscribir(5)">5</button>
-        <button class="mg-tecla" onclick="mgEscribir(6)">6</button>
         <button class="mg-tecla" onclick="mgEscribir(7)">7</button>
         <button class="mg-tecla" onclick="mgEscribir(8)">8</button>
         <button class="mg-tecla" onclick="mgEscribir(9)">9</button>
-        <button class="mg-tecla" onclick="mgEscribir(0)">0</button>
-        <button class="mg-tecla mg-tecla--accion" onclick="mgBorrar()">⌫</button>
-        <button class="mg-tecla mg-tecla--accion" onclick="mgComprobar()">ok</button>
+        <button class="mg-tecla mg-tecla--borrar" onclick="mgBorrar()">⌫</button>
+
+        <button class="mg-tecla" onclick="mgEscribir(4)">4</button>
+        <button class="mg-tecla" onclick="mgEscribir(5)">5</button>
+        <button class="mg-tecla" onclick="mgEscribir(6)">6</button>
+        <button class="mg-tecla mg-tecla--ok" onclick="mgComprobar()">OK</button>
+
+        <button class="mg-tecla" onclick="mgEscribir(1)">1</button>
+        <button class="mg-tecla" onclick="mgEscribir(2)">2</button>
+        <button class="mg-tecla" onclick="mgEscribir(3)">3</button>
+        <button class="mg-tecla mg-tecla--cero" onclick="mgEscribir(0)">0</button>
       </div>
 
-      <button id="mg-btn-comprobar" class="mg-boton-comprobar" onclick="mgComprobar()">¡Comprobar!</button>
-
-      <button id="mg-btn-siguiente" class="cg-boton-siguiente" onclick="mgSiguiente()" style="display:none; margin-top: 15px;">
-        Siguiente ronda →
-      </button>
     </div>
   </div>
 

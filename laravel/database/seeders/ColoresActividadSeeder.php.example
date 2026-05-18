@@ -1,0 +1,47 @@
+<?php
+/*
+|--------------------------------------------------------------------------
+| PLANTILLA: cómo registrar tu juego como actividad
+|--------------------------------------------------------------------------
+|
+| Este archivo es un EJEMPLO. Tiene extensión .example para que Laravel
+| no lo cargue. Cuando hagas tu juego:
+|
+| 1. Copia este archivo y renómbralo (sin .example):
+|      cp ColoresActividadSeeder.php.example MiJuegoActividadSeeder.php
+|
+| 2. Cambia el nombre de la clase y los datos a los de tu juego.
+|
+| 3. Añade tu clase a `$seeders` dentro de ActividadSeeder::run().
+|
+| 4. Ejecuta:  php artisan db:seed
+|
+*/
+
+namespace Database\Seeders;
+
+use App\Models\Actividad;
+use Illuminate\Database\Seeder;
+
+class ColoresActividadSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // firstOrCreate evita duplicar si se ejecuta el seeder varias veces
+        Actividad::firstOrCreate(
+            ['slug' => 'colores'],            // criterio de búsqueda
+            [                                  // valores si hay que crearlo
+                'icono'       => '🎨',
+                'tag'         => 'Visual',
+                'titulo'      => 'Reconocimiento de Colores',
+                'descripcion' => 'Identifica colores, asocia nombres y entrena la percepción visual con ejercicios progresivos y divertidos.',
+                'tiempo'      => '~5 min',
+                'nivel'       => 'Nivel básico',
+                'ruta_nombre' => 'juego.colores',     // debe coincidir con tu Route::name(...)
+                'btn_clase'   => 'btn-naranja',       // 'btn-naranja' o 'btn-verde'
+                'orden'       => 10,                  // orden de aparición en la home
+                'activa'      => true,
+            ]
+        );
+    }
+}
