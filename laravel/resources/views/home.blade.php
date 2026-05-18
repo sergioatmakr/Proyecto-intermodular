@@ -11,107 +11,33 @@
     <p>Ejercicios diseñados para mantener activas las capacidades cognitivas de forma sencilla y entretenida.</p>
   </section>
 
-  <!-- ACTIVIDADES -->
-  {{-- Cuando añadáis un juego, copiad esta plantilla de tarjeta dentro de la sección:
-
-  <div class="card">
-    <div class="card-icon">🎨</div>
-    <span class="card-tag">Categoría</span>
-    <h2>Nombre del juego</h2>
-    <p>Descripción corta del juego.</p>
-    <div class="card-meta">
-      <span>⏱ ~5 min</span>
-      <span>⭐ Nivel básico</span>
-    </div>
-    <a href="{{ route('juego.slug') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-  </div>
-
+  <!-- ACTIVIDADES (leídas dinámicamente de la BD) -->
+  {{--
+    Las tarjetas se generan automáticamente a partir de la tabla `actividades`.
+    Para añadir un juego, crea un seeder específico (ver
+    database/seeders/ColoresActividadSeeder.php.example).
   --}}
   <section class="actividades">
-
-    <div class="card">
-      <div class="card-icon">🎨</div>
-      <span class="card-tag">Visual</span>
-      <h2>Reconocimiento de Colores</h2>
-      <p>Identifica colores, asocia nombres y entrena la percepción visual con ejercicios progresivos y divertidos.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
+    @forelse($actividades as $actividad)
+      <div class="card">
+        <div class="card-icon">{{ $actividad->icono }}</div>
+        <span class="card-tag">{{ $actividad->tag }}</span>
+        <h2>{{ $actividad->titulo }}</h2>
+        <p>{{ $actividad->descripcion }}</p>
+        <div class="card-meta">
+          <span>⏱ {{ $actividad->tiempo }}</span>
+          <span>⭐ {{ $actividad->nivel }}</span>
+        </div>
+        <a href="{{ $actividad->url }}" class="btn {{ $actividad->btn_clase }}">
+          Empezar <span>→</span>
+        </a>
       </div>
-      <a href="{{ route('juego.colores') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">🎯</div>
-      <span class="card-tag">Estrategia</span>
-      <h2>Tres en Raya</h2>
-      <p>Juega contra la máquina al clásico tres en raya. Ideal para una partida rápida.</p>
-      <div class="card-meta">
-        <span>⏱ ~2 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.tres-raya') }}" class="btn btn-verde">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">🧩</div>
-      <span class="card-tag">Espacial</span>
-      <h2>Puzzle</h2>
-      <p>Arma rompecabezas con tus propias fotos. Elige 6, 9 o 12 piezas según la dificultad.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Adaptable</span>
-      </div>
-      <a href="{{ route('juego.puzzle') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-    </div>
-    
-    <div class="card">
-      <div class="card-icon">🔢</div>
-      <span class="card-tag">Lógica</span>
-      <h2>Operaciones Matemáticas</h2>
-      <p>Resuelve sumas, restas y más. Ejercita el razonamiento numérico con retos adaptados a tu ritmo.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.matematicas') }}" class="btn btn-verde">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">🖼️</div>
-      <span class="card-tag">Visual</span>
-      <h2>Reconocimiento de Imágenes</h2>
-      <p>Lee la palabra y selecciona la imagen correcta. Personaliza los temas y añade tus propias imágenes.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.imagenes') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">🔤</div>
-      <span class="card-tag">Lenguaje</span>
-      <h2>Sopa de Letras</h2>
-      <p>Encuentra palabras escondidas entre las letras. Personaliza la lista con tus propias palabras.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Adaptable</span>
-      </div>
-      <a href="{{ route('juego.sopa') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">📋</div>
-      <span class="card-tag">Secuenciación</span>
-      <h2>Secuencias de Tareas</h2>
-      <p>Aprende a hacer tareas paso a paso con pictogramas. Crea tus propias secuencias usando ARASAAC.</p>
-      <div class="card-meta">
-        <span>⏱ ~5 min</span>
-        <span>⭐ Nivel básico</span>
-      </div>
-      <a href="{{ route('juego.secuencias') }}" class="btn btn-verde">Empezar <span>→</span></a>
-    </div>
+    @empty
+      <p class="actividades-vacio">
+        Aún no hay juegos registrados. Cuando un compañero añada el suyo
+        aparecerá aquí automáticamente.
+      </p>
+    @endforelse
   </section>
 
   <!-- BARRA DE PROGRESO DECORATIVA -->

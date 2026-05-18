@@ -1,157 +1,211 @@
-# MentActiva
+# MentActiva — Versión para InfinityFree
 
-Aplicación de estimulación cognitiva en Laravel 11 + PHP 8.3.
+Esta carpeta contiene la versión del proyecto preparada para **subir a
+InfinityFree** (o cualquier hosting compartido con PHP 8.2+ y MySQL).
 
-## Requisitos
+> Diferencia con el repo de desarrollo: aquí está incluido `vendor/` y
+> el dump SQL listo para importar.
 
-- PHP **8.2 o superior** (8.3 recomendado)
-- Composer 2.x
-- WAMP, XAMPP, MAMP o similar (opcional, se puede usar `php artisan serve`)
+## Despliegue paso a paso
 
-## Instalación
+### 1. Crear la base de datos en InfinityFree
 
+1. Entra al **Control Panel** de InfinityFree
+2. Busca **MySQL Databases**
+3. Click **Create Database**:
+   - Database name: `mentactiva` (te quedará `epiz_xxxxxxxx_mentactiva`)
+4. **Anota los datos** que te muestra el panel:
+   - **Host** (ejemplo: `sqlxxx.infinityfree.com`)
+   - **Database name** (`epiz_xxxxxxxx_mentactiva`)
+   - **Username** (`epiz_xxxxxxxx`)
+   - **Password** (la que estableciste)
+
+### 2. Importar el dump SQL
+
+1. En el panel, click **phpMyAdmin** de la BD recién creada
+2. Selecciona tu BD en la izquierda
+3. Pestaña **Import** (arriba)
+4. **Choose File** → sube `database/install.sql` de este proyecto
+5. **Go** (abajo)
+
+Se crean las 9 tablas y se insertan los 7 juegos. ✅
+
+### 3. Subir los archivos del proyecto
+
+Usa cualquier cliente FTP (FileZilla, WinSCP) o el **File Manager** del
+panel de InfinityFree.
+
+- Conecta con los datos FTP que te dio InfinityFree
+- Sube **todo el contenido de esta carpeta** dentro de `htdocs/`
+  (Es decir, tu `htdocs/app/`, `htdocs/vendor/`, `htdocs/public/`, etc.)
+
+> ⚠️ La subida tarda 5-15 min porque `vendor/` pesa ~76 MB y son
+> miles de archivos. Si FileZilla muestra "Stalled", reduce las
+> conexiones simultáneas a 1 o 2.
+
+### 4. Configurar el `.env` en el servidor
+
+1. Renombra `htdocs/.env.example` a `htdocs/.env` (desde el File Manager)
+2. Edita `htdocs/.env` y rellena los datos de la BD:
+
+```env
+APP_NAME=MentActiva
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=https://tu-subdominio.infinityfreeapp.com
+
+DB_CONNECTION=mysql
+DB_HOST=sqlxxx.infinityfree.com           ← el que te dio el panel
+DB_PORT=3306
+DB_DATABASE=epiz_xxxxxxxx_mentactiva      ← el nombre completo
+DB_USERNAME=epiz_xxxxxxxx
+DB_PASSWORD=tu_password_real
+```
+
+### 5. Generar APP_KEY
+
+InfinityFree no tiene terminal SSH. Tienes dos opciones:
+
+**Opción A — desde tu PC local**: ejecuta
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/<usuario>/Proyecto-intermodular.git
-cd Proyecto-intermodular/laravel
+php artisan key:generate --show
+```
+Copia el resultado (`base64:xxxxx...`) y pégalo en `APP_KEY=` del `.env`.
 
-# 2. Instalar dependencias PHP (descarga el motor de Laravel y librerías)
-composer install
+**Opción B — endpoint temporal**: visita una vez
+`https://tu-subdominio.infinityfreeapp.com/?generate-key=1` (requiere
+añadir esa ruta primero al `routes/web.php`).
 
-# 3. Crear el archivo de entorno a partir de la plantilla
-cp .env.example .env          # en Linux/Mac
-copy .env.example .env        # en Windows CMD
+> 💡 Es más sencillo la Opción A. Solo tienes que hacerlo una vez.
 
-# 4. Generar la clave de la aplicación
-php artisan key:generate
+### 6. Permisos de carpetas (importante)
 
-# 5. Crear la base de datos SQLite vacía y aplicar migraciones
-php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
-php artisan migrate
+Desde el File Manager, click derecho en estas carpetas y asegúrate de
+que tienen permisos **755** o **775**:
 
-# 6. Arrancar el servidor
-php artisan serve
+- `htdocs/storage/` (y todas sus subcarpetas)
+- `htdocs/bootstrap/cache/`
+
+Si no, Laravel no puede escribir logs ni cache y dará error 500.
+
+### 7. Probar
+
+Abre **https://tu-subdominio.infinityfreeapp.com/public/**
+
+Deberías ver MentActiva con los 7 juegos. Si funciona, ¡listo! 🎉
+
+## URL: ¿con `/public/` o sin?
+
+InfinityFree no permite cambiar el **document root**. Por defecto:
+
+- URL del proyecto: `tudominio.infinityfreeapp.com/public/`
+
+Esto funciona pero queda feo. Hay dos formas de quitarlo:
+
+### Opción A — `.htaccess` redirect (la simple, ya incluida)
+
+El `.htaccess` de la raíz que viene con este proyecto redirige
+automáticamente de `tudominio.com/` a `tudominio.com/public/`.
+
+Sigue mostrando `/public/` en la URL pero al menos el usuario solo
+escribe la raíz. ✅ Esto **ya funciona** sin tocar nada.
+
+### Opción B — Mover `index.php` a la raíz (URL totalmente limpia)
+
+Es más laborioso pero deja la URL como `tudominio.com/actividades`:
+
+1. Copia `htdocs/public/index.php` a `htdocs/index.php`
+2. Copia `htdocs/public/.htaccess` a `htdocs/.htaccess` (sobrescribe el actual)
+3. Edita `htdocs/index.php` y cambia:
+   ```php
+   require __DIR__.'/../vendor/autoload.php';
+   ```
+   por:
+   ```php
+   require __DIR__.'/vendor/autoload.php';
+   ```
+   Y cambia también la línea de `bootstrap/app.php`:
+   ```php
+   $app = require_once __DIR__.'/../bootstrap/app.php';
+   ```
+   por:
+   ```php
+   $app = require_once __DIR__.'/bootstrap/app.php';
+   ```
+4. Mueve los assets de `htdocs/public/css/` a `htdocs/css/` (igual con `js/`)
+
+Es opcional. Solo hazlo si te molesta el `/public/` en la URL.
+
+## Resolución de problemas
+
+### Error 500 al abrir la web
+- Comprueba que `APP_KEY` está rellenada en `.env`
+- Comprueba permisos de `storage/` (755)
+- Activa temporalmente `APP_DEBUG=true` para ver el error específico
+- Mira `storage/logs/laravel.log` (puedes verlo desde el File Manager)
+
+### Error de conexión BD ("could not find driver")
+- Asegúrate de que `DB_CONNECTION=mysql` (no `sqlite`)
+- Comprueba que los datos del `.env` son correctos
+- Verifica en el panel que la BD existe
+
+### "Site can't be reached"
+- El subdominio de InfinityFree tarda unos minutos en propagarse tras crearse
+- Asegúrate de que estás usando `https://` (no `http://`)
+
+### Las tarjetas de los juegos no aparecen
+- Comprueba que importaste `install.sql` en phpMyAdmin
+- En phpMyAdmin, ejecuta `SELECT * FROM actividades;` — debe haber 7 filas
+
+## Actualizar el proyecto en producción
+
+Cuando hagas cambios en el código en tu PC:
+
+1. Comprueba que funcionan localmente
+2. Sube por FTP **solo los archivos cambiados** (no todo `vendor/`)
+3. Si modificas algo de PHP o vistas, borra el contenido de:
+   - `storage/framework/views/`
+   - `storage/framework/cache/`
+   - `bootstrap/cache/*.php` (deja el `.gitignore`)
+4. Si cambias la estructura de la BD (nueva migración), exporta el nuevo SQL
+   y reimpórtalo en phpMyAdmin
+
+## Estructura
+
+```
+htdocs/                          ← la raíz tras subir todo
+├── .env                          ← creas en el servidor con datos MySQL
+├── .htaccess                     ← redirige a /public/
+├── app/                          ← código de la aplicación
+├── bootstrap/
+├── config/
+├── database/
+│   └── install.sql               ← dump para phpMyAdmin (solo se usa una vez)
+├── public/                       ← punto de entrada Laravel
+│   ├── index.php
+│   ├── .htaccess
+│   ├── css/, js/                 ← tus assets
+├── resources/views/              ← Blade
+├── routes/
+├── storage/                      ← logs, cache (debe ser escribible)
+└── vendor/                       ← dependencias (~76 MB)
 ```
 
-Abre **http://127.0.0.1:8000** en el navegador.
+## Diferencias con la versión de desarrollo
 
-> Si tu PHP por defecto es < 8.2, en Windows con WAMP puedes lanzar artisan con
-> la ruta completa:
-> `C:\wamp64\bin\php\php8.3.14\php.exe artisan serve`
+| | Desarrollo (en tu PC) | Producción (InfinityFree) |
+|---|---|---|
+| BD | SQLite (archivo local) | MySQL (servicio del hosting) |
+| `.env` | `APP_DEBUG=true` | `APP_DEBUG=false` |
+| `vendor/` | NO en git (composer install) | SÍ subido por FTP |
+| Cache | Limpia manualmente | Limpia tras cada deploy |
+| Errores | Página amigable de Laravel | Página genérica + logs |
 
-## Estructura del proyecto
+---
 
-```
-laravel/
-├── app/Http/Controllers/
-│   ├── HomeController.php           ← Inicio (/)
-│   ├── ActividadesController.php    ← Listado de juegos (/actividades)
-│   ├── ProgresoController.php       ← Progreso (/progreso)
-│   └── Games/                       ← AQUÍ van tus controladores de juego
-│
-├── resources/views/
-│   ├── layouts/app.blade.php        ← Layout maestro (header, footer, nav)
-│   ├── home.blade.php
-│   ├── actividades.blade.php
-│   ├── progreso.blade.php
-│   └── games/                       ← AQUÍ van tus vistas Blade de juego
-│
-├── public/
-│   ├── index.php                    ← Punto de entrada Laravel (NO TOCAR)
-│   ├── css/
-│   │   └── estilos.css              ← Estilos globales (header, cards, hero)
-│   └── js/
-│       └── eventos.js               ← JS de la barra de progreso
-│
-└── routes/
-    └── web.php                      ← Definición de rutas
-```
-
-## Cómo añadir un juego nuevo
-
-Cada juego tiene **4 archivos exclusivos** + tocas **3 archivos compartidos**.
-
-### 1. Crear los 4 archivos exclusivos (no chocan con otros)
-
-| Archivo | Plantilla |
-|---|---|
-| `app/Http/Controllers/Games/MiJuegoController.php` | Devuelve la vista con los datos iniciales |
-| `resources/views/games/mi-juego.blade.php` | HTML de la vista, extiende `layouts.app` |
-| `public/css/mi-juego.css` | Estilos del juego, **prefija todas las clases** (ej. `mj-`) |
-| `public/js/mi-juego.js` | Lógica del juego, **prefija variables/funciones** (ej. `mj`) |
-
-### 2. Registrar la ruta en `routes/web.php`
-
-```php
-use App\Http\Controllers\Games\MiJuegoController;
-
-Route::get('/juego/mi-juego', [MiJuegoController::class, 'index'])
-     ->name('juego.mi-juego');
-```
-
-### 3. Añadir la tarjeta en `home.blade.php`
-
-```blade
-<div class="card">
-  <div class="card-icon">🎯</div>
-  <span class="card-tag">Categoría</span>
-  <h2>Mi Juego</h2>
-  <p>Descripción corta del juego.</p>
-  <div class="card-meta">
-    <span>⏱ ~5 min</span>
-    <span>⭐ Nivel básico</span>
-  </div>
-  <a href="{{ route('juego.mi-juego') }}" class="btn btn-naranja">Empezar <span>→</span></a>
-</div>
-```
-
-### 4. Añadir la entrada en `ActividadesController.php`
-
-```php
-[
-    'icono'       => '🎯',
-    'tag'         => 'Categoría',
-    'titulo'      => 'Mi Juego',
-    'descripcion' => 'Descripción del juego.',
-    'tiempo'      => '~5 min',
-    'nivel'       => 'Nivel básico',
-    'ruta'        => route('juego.mi-juego'),
-    'btn_clase'   => 'btn-naranja',
-],
-```
-
-## Convenciones
-
-- **CSS**: cada juego usa un prefijo único (ej. `cg-`, `mg-`, `ig-`, `pz-`). Esto evita choques entre estilos.
-- **JS**: el código va dentro de una IIFE `(function () { 'use strict'; ... })()` con variables prefijadas, para no contaminar el scope global.
-- **Datos PHP → JS**: se pasan vía `window.XX_CONFIG = @json($datos);` en la vista, antes del `<script>` que carga el JS.
-
-## Flujo de trabajo con Git
-
-1. Crear rama por juego: `git checkout -b feature/juego-mi-juego`
-2. Desarrollar y commit: `git commit -m "feat(mi-juego): controlador, vista, css, js"`
-3. Subir: `git push -u origin feature/juego-mi-juego`
-4. Abrir Pull Request hacia `main` en GitHub
-5. Resolver conflictos en `routes/web.php`, `home.blade.php` y `ActividadesController.php` si los hay (aceptar ambos bloques)
-6. Mergear
-
-## Convención de commits
-
-Usar [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat(juego): añade nuevo juego de X`
-- `fix(juego): corrige bug Y`
-- `docs: actualiza README`
-- `refactor(juego): extrae función Z`
-- `style(juego): ajusta espaciado de tarjetas`
-
-## Tecnologías
-
-- **Backend**: Laravel 11, PHP 8.3
-- **Frontend**: Blade + HTML/CSS/JS vanilla (sin frameworks JS)
-- **Persistencia local**: `localStorage` para datos de usuario
-- **APIs externas**: [ARASAAC](https://arasaac.org) para pictogramas (en algunos juegos)
-
-## Licencia
-
-Proyecto académico — Proyecto Intermodular.
+**¿Problemas?** Comprueba en este orden:
+1. `storage/logs/laravel.log`
+2. `APP_DEBUG=true` temporalmente para ver el error
+3. Datos del `.env` (host, user, password)
+4. Permisos de `storage/`
