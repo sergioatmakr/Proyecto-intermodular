@@ -112,5 +112,8 @@
     layouts:  @json($layouts),
   };
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'puzzle'])
+@include('games._partial_estado', ['slug' => 'puzzle'])
+
 <script src="{{ asset('js/puzzle.js') }}" defer></script>
 @endpush

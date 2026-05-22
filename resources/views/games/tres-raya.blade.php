@@ -63,5 +63,8 @@
 <script>
   window.TR_CONFIG = @json($config);
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'tres-raya'])
+@include('games._partial_estado', ['slug' => 'tres-raya'])
+
 <script src="{{ asset('js/tres-raya.js') }}" defer></script>
 @endpush

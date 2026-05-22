@@ -24,18 +24,18 @@
   let sqPracticaOrden = [];         // orden elegido por el usuario en modo práctica
   let sqPracticaMezclados = [];     // los pasos mezclados (referencias)
 
-  // ── Persistencia ────────────────────────────────────────
+  // ── Persistencia en BD (vía window.MentActiva) ──────────
   function sqCargarSecuencias() {
-    try {
-      const g = localStorage.getItem('sq_secuencias_state');
-      if (g) return JSON.parse(g);
-    } catch (e) {}
+    const e = window.MentActiva && window.MentActiva.cargarEstado
+      ? window.MentActiva.cargarEstado() : null;
+    if (e && Array.isArray(e) && e.length) return e;
     return JSON.parse(JSON.stringify(SQ_INICIALES));
   }
 
   function sqGuardarSecuencias() {
-    try { localStorage.setItem('sq_secuencias_state', JSON.stringify(sqSecuencias)); }
-    catch (e) {}
+    if (window.MentActiva && window.MentActiva.guardarEstado) {
+      window.MentActiva.guardarEstado(sqSecuencias);
+    }
   }
 
   // ── Helpers ARASAAC ─────────────────────────────────────
@@ -264,6 +264,18 @@
     } else {
       sqPracticaResultado.textContent = `${aciertos}/${correctos.length} en su sitio. ¡Sigue intentando!`;
       sqPracticaResultado.className   = 'sq-practica-resultado sq-practica-resultado--mal';
+    }
+
+    // ── Nivel 2: guardar partida si hay sesión ──
+    if (window.MentActiva?.guardarPartida) {
+      window.MentActiva.guardarPartida({
+        puntos: aciertos * 10,
+        datos:  {
+          secuencia: sqSecuenciaActiva.nombre,
+          aciertos,
+          total: correctos.length,
+        },
+      });
     }
   }
 

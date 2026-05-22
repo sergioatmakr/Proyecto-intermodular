@@ -508,10 +508,29 @@ body.pz-pagina-juego { height: 100vh; overflow: hidden; }
 }
 .pz-btn-secundario:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
 
-/* ── Responsive ────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 819px): el cuerpo ya es 1 columna por defecto ── */
+@media (max-width: 819px) {
+  .pz-tablero       { max-width: 380px; }
+  .pz-bandeja-titulo { text-align: center; }
+}
+
+/* ── Móvil (≤ 600px) ── */
 @media (max-width: 600px) {
-  .pz-galeria { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
-  .pz-juego-cabecera { gap: 8px; }
-  .pz-stats { gap: 10px; padding: 6px 14px; font-size: 0.85rem; }
-  .pz-bandeja { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); padding: 8px; }
+  .pz-galeria        { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .pz-juego-cabecera { gap: 8px; flex-wrap: wrap; }
+  .pz-stats          { gap: 10px; padding: 6px 14px; font-size: 0.85rem; }
+  .pz-bandeja        { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); padding: 8px; }
+  .pz-tablero        { max-width: 100%; }
+  .pz-piezas-btn     { font-size: 1.05rem; padding: 8px 16px; }
+  .pz-titulo-pantalla { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+}
+
+/* ── Móvil muy estrecho (≤ 360px) ── */
+@media (max-width: 360px) {
+  .pz-galeria { grid-template-columns: repeat(2, 1fr); }
+  .pz-bandeja { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); }
 }

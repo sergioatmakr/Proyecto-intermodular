@@ -429,8 +429,24 @@ body.cg-pagina-juego {
   .cg-boton-color     { height: 60px; }
 }
 
-@media (max-width: 420px) {
-  .cg-cuadricula      { gap: 8px; }
-  .cg-tarjeta-juego   { padding: 12px 10px; }
-  .cg-estadisticas    { gap: 10px; padding: 7px 14px; }
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .cg-contenedor { max-width: 480px; }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+  .cg-cuadricula      { gap: 10px; }
+  .cg-tarjeta-juego   { padding: 14px 12px; }
+  .cg-estadisticas    { gap: 10px; padding: 8px 16px; }
+  .cg-boton-escuchar  { font-size: 1rem; padding: 12px 26px; }
+  .cg-instruccion     { font-size: 0.9rem; }
+  .cg-pantalla-inicio__titulo    { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+  .cg-pantalla-inicio__subtitulo { font-size: 0.95rem; }
+  .cg-fin__puntos     { font-size: clamp(3rem, 16vw, 4.5rem); }
+}
+
+/* ── Móvil muy estrecho (≤ 360px) ── */
+@media (max-width: 360px) {
+  .cg-boton-color { height: clamp(80px, 26vw, 120px); }
 }
