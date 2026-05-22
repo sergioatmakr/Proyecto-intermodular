@@ -29,18 +29,18 @@
   let pzIntervalo   = null;
   let pzGanado      = false;
 
-  // ── Persistencia ───────────────────────────────────────
+  // ── Persistencia en BD (vía window.MentActiva) ─────────
   function pzCargarImagenes() {
-    try {
-      const g = localStorage.getItem('pz_imagenes_state');
-      if (g) return JSON.parse(g);
-    } catch (e) {}
+    const e = window.MentActiva && window.MentActiva.cargarEstado
+      ? window.MentActiva.cargarEstado() : null;
+    if (e && Array.isArray(e) && e.length) return e;
     return JSON.parse(JSON.stringify(PZ_INICIALES));
   }
 
   function pzGuardarImagenes() {
-    try { localStorage.setItem('pz_imagenes_state', JSON.stringify(pzImagenes)); }
-    catch (e) { alert('No se pudo guardar la imagen: almacenamiento lleno.'); }
+    if (window.MentActiva && window.MentActiva.guardarEstado) {
+      window.MentActiva.guardarEstado(pzImagenes);
+    }
   }
 
   // ── Refs DOM ────────────────────────────────────────────
@@ -371,6 +371,18 @@
     pzVictoriaImg.src            = pzImagenSelec.src;
     pzPantallaJuego.classList.add('pz-oculta');
     pzPantallaVictoria.classList.remove('pz-oculta');
+
+    // ── Nivel 2: guardar partida si hay sesión ──
+    // Puntos = inversamente proporcional al número de movimientos
+    const segs   = Math.floor((Date.now() - pzTiempoIni) / 1000);
+    const puntos = Math.max(10, 200 - pzMovs * 2 - segs);
+    if (window.MentActiva?.guardarPartida) {
+      window.MentActiva.guardarPartida({
+        puntos:       puntos,
+        duracion_seg: segs,
+        datos:        { piezas: pzCantidad, movimientos: pzMovs },
+      });
+    }
   }
 
   // ── Cronómetro ─────────────────────────────────────────
