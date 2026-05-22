@@ -35,17 +35,17 @@
 
   if (!trBtnEmpezar) return;
 
-  // ── Persistencia del marcador ──────────────────────────
+  // ── Persistencia del marcador en BD (vía window.MentActiva) ──
   function trCargarMarcador() {
-    try {
-      const g = localStorage.getItem('tr_marcador');
-      if (g) return JSON.parse(g);
-    } catch (e) {}
+    const e = window.MentActiva && window.MentActiva.cargarEstado
+      ? window.MentActiva.cargarEstado() : null;
+    if (e && typeof e === 'object' && 'jugador' in e) return e;
     return { jugador: 0, ia: 0, empates: 0 };
   }
   function trGuardarMarcador() {
-    try { localStorage.setItem('tr_marcador', JSON.stringify(trMarcador)); }
-    catch (e) {}
+    if (window.MentActiva && window.MentActiva.guardarEstado) {
+      window.MentActiva.guardarEstado(trMarcador);
+    }
   }
   function trActualizarMarcador() {
     trMarkJugador.textContent = trMarcador.jugador;
@@ -118,15 +118,19 @@
       if (trTablero[a] && trTablero[a] === trTablero[b] && trTablero[a] === trTablero[c]) {
         trMarcarLineaGanadora(linea);
         trFin = true;
+        let resultado;
         if (trTablero[a] === 'X') {
           trMostrarMensaje('🎉 ¡Has ganado!', 'ganaste');
           trMarcador.jugador++;
+          resultado = 'gana';
         } else {
           trMostrarMensaje('😔 Ha ganado la IA', 'perdiste');
           trMarcador.ia++;
+          resultado = 'pierde';
         }
         trGuardarMarcador();
         trActualizarMarcador();
+        trGuardarPartida(resultado);
         return true;
       }
     }
@@ -136,9 +140,20 @@
       trMarcador.empates++;
       trGuardarMarcador();
       trActualizarMarcador();
+      trGuardarPartida('empate');
       return true;
     }
     return false;
+  }
+
+  // ── Nivel 2: guardar partida si hay sesión ──
+  function trGuardarPartida(resultado) {
+    if (!window.MentActiva?.guardarPartida) return;
+    const puntos = resultado === 'gana' ? 10 : (resultado === 'empate' ? 5 : 0);
+    window.MentActiva.guardarPartida({
+      puntos: puntos,
+      datos:  { resultado },
+    });
   }
 
   function trMarcarLineaGanadora(linea) {
