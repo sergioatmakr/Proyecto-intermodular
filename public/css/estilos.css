@@ -37,6 +37,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      padding-right:10px;
     }
 
     .logo-icono {
@@ -162,6 +163,11 @@
 
     .card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent-a), #ffb347); }
     .card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-b), #43e8c8); }
+    .card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-a), #ffb347); }
+    .card:nth-child(4)::before { background: linear-gradient(90deg, var(--accent-b), #43e8c8); }
+    .card:nth-child(5)::before { background: linear-gradient(90deg, var(--accent-a), #ffb347); }
+    .card:nth-child(6)::before { background: linear-gradient(90deg, var(--accent-b), #43e8c8); }
+    .card:nth-child(7)::before { background: linear-gradient(90deg, var(--accent-a), #ffb347); }
 
     .card:hover {
       transform: translateY(-5px);
@@ -180,6 +186,11 @@
 
     .card:nth-child(1) .card-icon { background: rgba(255,112,67,0.12); }
     .card:nth-child(2) .card-icon { background: rgba(38,198,160,0.12); }
+    .card:nth-child(3) .card-icon { background: rgba(255,112,67,0.12); }
+    .card:nth-child(4) .card-icon { background: rgba(38,198,160,0.12); }
+    .card:nth-child(5) .card-icon { background: rgba(255,112,67,0.12); }
+    .card:nth-child(6) .card-icon { background: rgba(38,198,160,0.12); }
+    .card:nth-child(7) .card-icon { background: rgba(255,112,67,0.12); }
 
     .card-tag {
       font-size: 0.72rem;
@@ -192,6 +203,11 @@
 
     .card:nth-child(1) .card-tag { background: rgba(255,112,67,0.1); color: var(--accent-a); }
     .card:nth-child(2) .card-tag { background: rgba(38,198,160,0.1); color: var(--accent-b); }
+    .card:nth-child(3) .card-tag { background: rgba(255,112,67,0.1); color: var(--accent-a); }
+    .card:nth-child(4) .card-tag { background: rgba(38,198,160,0.1); color: var(--accent-b); }    
+	.card:nth-child(5) .card-tag { background: rgba(255,112,67,0.1); color: var(--accent-a); }
+    .card:nth-child(6) .card-tag { background: rgba(38,198,160,0.1); color: var(--accent-b); }
+	.card:nth-child(7) .card-tag { background: rgba(255,112,67,0.1); color: var(--accent-a); }
 
     .card h2 {
       font-family: 'Baloo 2', sans-serif;
@@ -255,6 +271,69 @@
       box-shadow: 0 4px 14px rgba(38,198,160,0.35);
     }
 
+    /* ── BIENVENIDA (texto explicativo de la home) ── */
+    .bienvenida {
+      max-width: 860px;
+      margin: 1rem auto 2.5rem;
+      padding: 0 2rem;
+    }
+
+    .bienvenida-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.4rem;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .bienvenida-card h2 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .bienvenida-card p {
+      font-size: 1.08rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .bienvenida-card em {
+      font-style: normal;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .bienvenida-lista {
+      list-style: none;
+      display: grid;
+      gap: 0.7rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .bienvenida-lista li {
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 0.9rem 1.1rem;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .bienvenida-cta { margin-top: 0.2rem; }
+
+    @media (max-width: 560px) {
+      .bienvenida { padding: 0 1.2rem; }
+      .bienvenida-card { padding: 1.6rem 1.4rem; }
+      .bienvenida-card h2 { font-size: 1.35rem; }
+      .bienvenida-card p { font-size: 1rem; }
+      .bienvenida-lista li { font-size: 0.95rem; }
+    }
+
     /* ── BARRA DE PROGRESO DECORATIVA ── */
     .progress-section {
       max-width: 860px;
@@ -278,6 +357,15 @@
       font-size: 0.9rem;
       color: var(--muted);
       min-width: 130px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .prog-sub {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--primary);
     }
 
     .prog-bar-wrap {
@@ -305,6 +393,19 @@
       text-align: right;
     }
 
+    .prog-aviso {
+      max-width: 860px;
+      margin: 0.8rem auto 0;
+      padding: 0 2rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+    }
+    .prog-aviso a { color: var(--primary); font-weight: 800; }
+    .prog-aviso strong { color: var(--accent-a); }
+    .prog-aviso--ok { color: var(--accent-b); }
+
     /* ── FOOTER ── */
     footer {
       margin-top: auto;
@@ -329,8 +430,43 @@
     .progress-box { animation: fadeUp 0.5s 0.4s ease both; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 500px) {
-      header { padding: 0 1rem; }
-      nav a { padding: 6px 10px; font-size: 0.85rem; }
-      .logo-text { font-size: 1.2rem; }
+
+    /* Tablet (≤ 768px) */
+    @media (max-width: 768px) {
+      header { padding: 0 1.2rem; }
+      .actividades { padding: 0 1.2rem; gap: 1.4rem; }
+      .progress-section { padding: 0 1.2rem; }
+      .hero { padding: 2.5rem 1.5rem 1.5rem; }
+    }
+
+    /* Móvil (≤ 560px) — el header se reorganiza si hace falta */
+    @media (max-width: 560px) {
+      header {
+        height: auto;
+        min-height: 64px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+      }
+      .logo-icono { width: 36px; height: 36px; font-size: 1.1rem; }
+      .logo-texto { font-size: 1.2rem; }
+
+      nav { gap: 0.2rem; flex-wrap: wrap; }
+      nav a { padding: 6px 9px; font-size: 0.82rem; }
+
+      .hero { padding: 2rem 1.2rem 1rem; }
+      .hero p { font-size: 1rem; }
+
+      /* Las tarjetas pasan a una sola columna */
+      .actividades { grid-template-columns: 1fr; margin: 1.5rem auto 2rem; }
+      .card { padding: 1.6rem 1.4rem; }
+
+      .progress-box { padding: 1.2rem 1.4rem; gap: 1rem; }
+    }
+
+    /* Acciones de usuario (login/logout) en móvil */
+    @media (max-width: 480px) {
+      .user-actions { gap: 6px; margin-right: 0; }
+      .user-saludo  { display: none; }
+      .btn-link     { padding: 5px 10px; font-size: 0.75rem; }
     }
