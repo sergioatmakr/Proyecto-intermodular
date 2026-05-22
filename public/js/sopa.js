@@ -1,7 +1,7 @@
 /* ============================================================
    sopa.js — Juego "Sopa de Letras"
-   - Genera grid colocando palabras en 8 direcciones (con choque
-     permitido si las letras coinciden)
+   - Genera grid colocando palabras en 4 direcciones "hacia delante"
+     (→ ↓ ↘ ↗), con choque permitido si las letras coinciden
    - Selección por arrastre (pointer events, funciona en mouse y touch)
    ============================================================ */
 
@@ -14,12 +14,13 @@
     tam_grid_min: 10, tam_grid_max: 15, palabras_recomendadas: 8,
   };
 
-  // 8 direcciones posibles para colocar una palabra: [deltaFila, deltaCol]
+  // 4 direcciones permitidas, todas se leen "hacia delante" (más fácil
+  // de leer para personas mayores): [deltaFila, deltaCol]
   const SP_DIRECCIONES = [
-    [0,  1], [0, -1],         // horizontal →, ←
-    [1,  0], [-1, 0],         // vertical ↓, ↑
-    [1,  1], [1, -1],         // diagonal ↘, ↙
-    [-1, 1], [-1, -1],        // diagonal ↗, ↖
+    [0,  1],   // horizontal →  (izquierda → derecha)
+    [1,  0],   // vertical   ↓  (arriba → abajo)
+    [1,  1],   // diagonal   ↘  (arriba-izquierda → abajo-derecha)
+    [-1, 1],   // diagonal   ↗  (abajo-izquierda → arriba-derecha)
   ];
 
   const SP_ALFABETO = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
@@ -63,17 +64,17 @@
 
   if (!spGridEl) return;
 
-  // ── Persistencia del pool de palabras ──────────────────
+  // ── Persistencia del pool de palabras en BD (window.MentActiva) ──
   function spCargarPool() {
-    try {
-      const g = localStorage.getItem('sp_pool_palabras');
-      if (g) return JSON.parse(g);
-    } catch (e) {}
+    const e = window.MentActiva && window.MentActiva.cargarEstado
+      ? window.MentActiva.cargarEstado() : null;
+    if (e && Array.isArray(e) && e.length) return e;
     return [...SP_INICIALES];
   }
   function spGuardarPool() {
-    try { localStorage.setItem('sp_pool_palabras', JSON.stringify(spPool)); }
-    catch (e) {}
+    if (window.MentActiva && window.MentActiva.guardarEstado) {
+      window.MentActiva.guardarEstado(spPool);
+    }
   }
 
   // ── Normalizar palabras (mayúsculas, sin tildes ni símbolos) ──
@@ -167,28 +168,28 @@
   spBtnJugar.addEventListener('click', () => spIniciarPartida());
 
   function spIniciarPartida() {
-    const palabras = [...spSelecPool];
-    if (palabras.length < 3) return;
+    // Cuadrícula FIJA de 7×7 (letras grandes, mejor visibilidad para mayores)
+    const TAM = 7;
 
-    // Ordenar palabras por longitud descendente: las largas son más difíciles de colocar
+    // En un grid de 7×7 solo caben palabras de hasta 7 letras
+    let palabras    = [...spSelecPool].filter(p => p.length <= TAM);
+    const muyLargas = [...spSelecPool].filter(p => p.length > TAM);
+
+    if (palabras.length < 3) {
+      alert('Para la cuadrícula 7×7 necesitas al menos 3 palabras de 7 letras o menos.');
+      return;
+    }
+
+    // Ordenar por longitud descendente: las largas se colocan primero
     palabras.sort((a, b) => b.length - a.length);
 
-    // Calcular tamaño del grid: depende de la palabra más larga y del total
-    const masLarga = palabras[0].length;
-    const totalLetras = palabras.reduce((s, p) => s + p.length, 0);
-    let tam = Math.max(
-      SP_CONFIG.tam_grid_min,
-      masLarga + 1,
-      Math.ceil(Math.sqrt(totalLetras * 2.5))   // factor 2.5 para dejar espacio
-    );
-    tam = Math.min(tam, SP_CONFIG.tam_grid_max);
-
-    const resultado = spGenerarSopa(palabras, tam);
+    const resultado = spGenerarSopa(palabras, TAM);
     spGrid = resultado.grid;
     spUbicaciones = resultado.ubicaciones;
 
-    if (resultado.fallidas.length > 0) {
-      alert(`No se pudieron colocar: ${resultado.fallidas.join(', ')}. Prueba con menos palabras o más cortas.`);
+    const fallidas = [...muyLargas, ...resultado.fallidas];
+    if (fallidas.length > 0) {
+      alert(`Estas palabras no caben en la cuadrícula 7×7: ${fallidas.join(', ')}.`);
       if (resultado.ubicaciones.length < 3) return;
     }
 
@@ -424,6 +425,16 @@
     spVictoriaPalabras.textContent = spUbicaciones.length;
     spPantallaJuego.classList.add('sp-oculta');
     spPantallaVictoria.classList.remove('sp-oculta');
+
+    // ── Nivel 2: guardar partida si hay sesión ──
+    const segs = Math.floor((Date.now() - spTiempoIni) / 1000);
+    if (window.MentActiva?.guardarPartida) {
+      window.MentActiva.guardarPartida({
+        puntos:       spUbicaciones.length * 10,
+        duracion_seg: segs,
+        datos:        { palabras: spUbicaciones.length },
+      });
+    }
   }
 
   // ── Navegación ─────────────────────────────────────────

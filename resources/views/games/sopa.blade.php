@@ -22,7 +22,7 @@
       <div class="sp-acciones-rapidas">
         <button class="sp-btn-mini" id="sp-btn-sel-todas">✓ Todas</button>
         <button class="sp-btn-mini" id="sp-btn-sel-ninguna">✕ Ninguna</button>
-        <button class="sp-btn-mini" id="sp-btn-sel-aleatoria">🎲 Aleatorias (8)</button>
+        <button class="sp-btn-mini" id="sp-btn-sel-aleatoria">🎲 Aleatorias (5)</button>
       </div>
 
       <div class="sp-palabras-lista" id="sp-palabras-lista"></div>
@@ -99,5 +99,8 @@
     config:   @json($config),
   };
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'sopa'])
+@include('games._partial_estado', ['slug' => 'sopa'])
+
 <script src="{{ asset('js/sopa.js') }}" defer></script>
 @endpush

@@ -21,9 +21,9 @@ class SopaController extends Controller
         ];
 
         $config = [
-            'tam_grid_min'  => 10,
-            'tam_grid_max'  => 15,
-            'palabras_recomendadas' => 8,
+            'tam_grid_min'  => 7,
+            'tam_grid_max'  => 7,
+            'palabras_recomendadas' => 5,
         ];
 
         return view('games.sopa', compact('palabras', 'config'));
