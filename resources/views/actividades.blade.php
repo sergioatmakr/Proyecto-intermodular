@@ -35,4 +35,34 @@
     @endforelse
   </section>
 
+  <!-- BARRA DE PROGRESO DIARIA (real) -->
+  <section class="progress-section">
+    <div class="progress-box">
+      <div class="prog-label">
+        Progreso de hoy
+        @if($logueado)
+          <span class="prog-sub">{{ $puntosHoy }} / {{ $meta }} pts</span>
+        @endif
+      </div>
+      <div class="prog-bar-wrap">
+        <div class="prog-bar" id="bar" data-pct="{{ $porcentaje }}"></div>
+      </div>
+      <div class="prog-value" id="barVal">0%</div>
+    </div>
+
+    @if(!$logueado)
+      <p class="prog-aviso">
+        <a href="{{ route('login') }}">Inicia sesión</a> para registrar tu progreso diario.
+      </p>
+    @elseif($porcentaje >= 100)
+      <p class="prog-aviso prog-aviso--ok">🎉 ¡Meta diaria completada! ¡Buen trabajo!</p>
+    @else
+      <p class="prog-aviso">Te faltan <strong>{{ $meta - $puntosHoy }}</strong> puntos para tu meta de hoy.</p>
+    @endif
+  </section>
+
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/eventos.js') }}" defer></script>
+@endpush

@@ -49,7 +49,7 @@ body.tr-pagina { height: 100vh; overflow: hidden; }
   align-items: center;
   gap: clamp(16px, 2.5vh, 26px);
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
 }
 
 /* ── Pantalla de inicio ───────────────────────────────── */
@@ -101,7 +101,7 @@ body.tr-pagina { height: 100vh; overflow: hidden; }
   padding: 12px;
   border: 1px solid rgba(255,255,255,0.07);
   width: 100%;
-  max-width: 380px;
+  max-width: 430px;
 }
 
 .tr-marcador__item {
@@ -139,8 +139,8 @@ body.tr-pagina { height: 100vh; overflow: hidden; }
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows:    repeat(3, 1fr);
   gap: 8px;
-  width: 100%;
-  max-width: 380px;
+  width: 150%;
+  max-width: 430px;
   aspect-ratio: 1;
   padding: 8px;
   background: var(--tr-tarjeta);
@@ -154,7 +154,7 @@ body.tr-pagina { height: 100vh; overflow: hidden; }
   border-radius: 12px;
   cursor: pointer;
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(3rem, 11vw, 4.5rem);
+  font-size: clamp(3.3rem, 11vw, 5rem);
   line-height: 1;
   color: var(--tr-texto);
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
@@ -239,9 +239,26 @@ body.tr-pagina { height: 100vh; overflow: hidden; }
 }
 .tr-btn-secundario:hover { border-color: rgba(255,255,255,0.4); color: var(--tr-texto); }
 
-/* Responsive móvil pequeño */
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+
+/* Móvil estrecho (anchura) */
+@media (max-width: 480px) {
+  .tr-area            { padding: 0.8rem; }
+  .tr-inicio-card     { padding: 28px 22px; }
+  .tr-marcador        { padding: 8px; }
+  .tr-marcador__item  { padding: 6px 2px; }
+  .tr-marcador__valor { font-size: 1.3rem; }
+  .tr-marcador__label { font-size: 0.58rem; letter-spacing: 0.5px; }
+  .tr-tablero         { gap: 7px; padding: 7px; max-width: min(92vw, 390px); }
+  .tr-casilla         { font-size: clamp(2.8rem, 17vw, 4rem); border-radius: 10px; }
+  .tr-btn-grande      { font-size: 1.05rem; padding: 12px 30px; }
+}
+
+/* Pantalla baja (móvil apaisado) */
 @media (max-height: 640px) {
   .tr-area { padding: 0.5rem 1rem; }
   .tr-contenedor { gap: 10px; }
-  .tr-tablero { max-width: 280px; }
+  .tr-tablero { max-width: 330px; }
 }

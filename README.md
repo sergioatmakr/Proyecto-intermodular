@@ -1,211 +1,197 @@
-# MentActiva — Versión para InfinityFree
+# MentActiva
 
-Esta carpeta contiene la versión del proyecto preparada para **subir a
-InfinityFree** (o cualquier hosting compartido con PHP 8.2+ y MySQL).
+**MentActiva** es una aplicación web de **estimulación cognitiva** pensada para
+personas mayores o con algún grado de dependencia. Reúne siete juegos sencillos y
+accesibles que ayudan a mantener activas la memoria, la atención, el razonamiento y
+la coordinación, registrando además el progreso diario de cada usuario.
 
-> Diferencia con el repo de desarrollo: aquí está incluido `vendor/` y
-> el dump SQL listo para importar.
+## Equipo
 
-## Despliegue paso a paso
+| Desarrollador | Responsabilidades principales |
+|---|---|
+| **Hugo Pérez** | Estructura base de la web, sopa de letras y tres en raya |
+| **Sergio Canseco** | Login/registro, guardado de partidas, matemáticas e imágenes |
+| **Fernando Gómez** | Estado de los juegos en BD, página de progreso, colores, secuencias y puzzle |
 
-### 1. Crear la base de datos en InfinityFree
+## Características
 
-1. Entra al **Control Panel** de InfinityFree
-2. Busca **MySQL Databases**
-3. Click **Create Database**:
-   - Database name: `mentactiva` (te quedará `epiz_xxxxxxxx_mentactiva`)
-4. **Anota los datos** que te muestra el panel:
-   - **Host** (ejemplo: `sqlxxx.infinityfree.com`)
-   - **Database name** (`epiz_xxxxxxxx_mentactiva`)
-   - **Username** (`epiz_xxxxxxxx`)
-   - **Password** (la que estableciste)
+- Siete juegos de estimulación cognitiva, cada uno con su propia mecánica.
+- Interfaz accesible: botones y textos grandes, diseño limpio y **responsive**
+  (móvil, tablet y escritorio).
+- Registro e inicio de sesión de usuarios.
+- Barra de **progreso diario** con una meta de 500 puntos: empieza vacía y se va
+  llenando según las partidas jugadas en el día.
+- Las puntuaciones se guardan en base de datos por usuario y se validan en el
+  servidor (no se pueden falsear desde el navegador).
+- El catálogo de juegos se gestiona desde la base de datos: añadir un juego nuevo
+  no obliga a tocar el código de las vistas.
 
-### 2. Importar el dump SQL
+## Los juegos
 
-1. En el panel, click **phpMyAdmin** de la BD recién creada
-2. Selecciona tu BD en la izquierda
-3. Pestaña **Import** (arriba)
-4. **Choose File** → sube `database/install.sql` de este proyecto
-5. **Go** (abajo)
+| Juego | Descripción |
+|---|---|
+| **Colores** | Se muestra el nombre de un color y varias opciones; hay que pulsar el color correcto. |
+| **Matemáticas** | Operaciones de cálculo mental con distintos niveles de dificultad. |
+| **Imágenes** | Una palabra y cuatro imágenes: hay que elegir la que corresponde. Permite crear temas y subir imágenes propias arrastrándolas, con previsualización. |
+| **Puzzle** | Una imagen se divide en 6, 9 o 12 piezas desordenadas que hay que recomponer. |
+| **Secuencias** | Muestra los pasos de una tarea mediante pictogramas, usando la API pública de ARASAAC. |
+| **Tres en raya** | Partida contra una IA de jugadas aleatorias, pensada para que el usuario pueda ganar. |
+| **Sopa de letras** | Cuadrícula 7×7 con palabras configurables; las palabras se leen en 4 direcciones (horizontal, vertical y dos diagonales, siempre hacia delante). |
 
-Se crean las 9 tablas y se insertan los 7 juegos. ✅
+## Tecnologías
 
-### 3. Subir los archivos del proyecto
+- **Backend:** Laravel 13 (PHP 8.3+), Eloquent ORM y plantillas Blade.
+- **Frontend:** HTML5, CSS3 propio (sin frameworks, con variables CSS y diseño
+  responsive) y JavaScript puro (un módulo independiente por juego).
+- **Base de datos:** MySQL / MariaDB en producción; SQLite opcional en local.
+- **API externa:** [ARASAAC](https://arasaac.org) para los pictogramas del juego de
+  secuencias.
+- **Autenticación:** sesiones de Laravel con contraseñas cifradas (bcrypt).
 
-Usa cualquier cliente FTP (FileZilla, WinSCP) o el **File Manager** del
-panel de InfinityFree.
+## Requisitos
 
-- Conecta con los datos FTP que te dio InfinityFree
-- Sube **todo el contenido de esta carpeta** dentro de `htdocs/`
-  (Es decir, tu `htdocs/app/`, `htdocs/vendor/`, `htdocs/public/`, etc.)
+- PHP 8.3 o superior
+- Composer
+- MySQL 5.7+ / MariaDB (o SQLite para pruebas rápidas en local)
+- (Opcional) Node.js, solo si se quieren recompilar los assets con Vite
 
-> ⚠️ La subida tarda 5-15 min porque `vendor/` pesa ~76 MB y son
-> miles de archivos. Si FileZilla muestra "Stalled", reduce las
-> conexiones simultáneas a 1 o 2.
+## Instalación en local (WAMP / XAMPP)
 
-### 4. Configurar el `.env` en el servidor
+1. Clona el repositorio y entra en la carpeta de la aplicación:
+   ```bash
+   git clone https://github.com/sergioatmakr/Proyecto-intermodular.git
+   cd Proyecto-intermodular/laravel
+   ```
 
-1. Renombra `htdocs/.env.example` a `htdocs/.env` (desde el File Manager)
-2. Edita `htdocs/.env` y rellena los datos de la BD:
+2. Instala las dependencias de PHP:
+   ```bash
+   composer install
+   ```
 
-```env
-APP_NAME=MentActiva
-APP_ENV=production
-APP_KEY=
-APP_DEBUG=false
-APP_URL=https://tu-subdominio.infinityfreeapp.com
+3. Crea el archivo de entorno y la clave de la aplicación
+   (en Windows, usa `copy` en lugar de `cp`):
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-DB_CONNECTION=mysql
-DB_HOST=sqlxxx.infinityfree.com           ← el que te dio el panel
-DB_PORT=3306
-DB_DATABASE=epiz_xxxxxxxx_mentactiva      ← el nombre completo
-DB_USERNAME=epiz_xxxxxxxx
-DB_PASSWORD=tu_password_real
+4. Configura la base de datos en `.env`:
+
+   **Opción A — MySQL:**
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=mentactiva
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+   **Opción B — SQLite (más rápido para probar):**
+   ```env
+   DB_CONNECTION=sqlite
+   ```
+   y crea el archivo vacío `database/database.sqlite`.
+
+5. Crea las tablas y los datos iniciales (elige una opción):
+   - **Con migraciones y seeders** (recomendado en local):
+     ```bash
+     php artisan migrate --seed
+     ```
+   - **Importando el SQL** (útil en hosting sin consola): importa
+     `database/install.sql` desde phpMyAdmin.
+
+6. Arranca el servidor:
+   ```bash
+   php artisan serve
+   ```
+   y abre `http://localhost:8000`.
+
+   > Si usas WAMP directamente, el `.htaccess` de la raíz redirige a `/public`,
+   > así que también funciona desde `http://localhost/Proyecto-intermodular/laravel/`.
+
+> Atajo: `composer setup` ejecuta de una vez la instalación de dependencias, la
+> copia del `.env`, la generación de la clave y las migraciones.
+
+## Base de datos
+
+| Tabla | Para qué sirve |
+|---|---|
+| `actividades` | Catálogo de juegos (icono, título, descripción, URL, nivel…). |
+| `users` | Usuarios registrados. |
+| `partidas` | Una fila por partida terminada: usuario, juego (`slug`), puntos, duración y datos extra en JSON. |
+| `game_states` | Estado configurable de cada juego por usuario (temas, palabras, secuencias…) en JSON. |
+
+El resto de tablas (`cache`, `jobs`, `sessions`…) son las estándar de Laravel.
+
+## Cómo se guarda la puntuación
+
+Cada vista de juego incluye un *partial* que define
+`window.MentActiva.guardarPartida(datos)`. Al terminar una partida, el JavaScript
+del juego lo llama:
+
+```javascript
+window.MentActiva.guardarPartida({
+  puntos: 80,
+  duracion_seg: 45,
+  datos: { rondas: 8 },
+});
 ```
 
-### 5. Generar APP_KEY
+La función envía un `fetch` a `POST /api/partida` (con token CSRF). Esa ruta usa el
+middleware `auth`, de modo que:
 
-InfinityFree no tiene terminal SSH. Tienes dos opciones:
+- Si el usuario **ha iniciado sesión**, `PartidaController` valida los datos y crea
+  la fila en `partidas`.
+- Si **no** ha iniciado sesión, la función no hace nada y el juego sigue
+  funcionando con normalidad.
 
-**Opción A — desde tu PC local**: ejecuta
-```bash
-php artisan key:generate --show
-```
-Copia el resultado (`base64:xxxxx...`) y pégalo en `APP_KEY=` del `.env`.
+La barra de "Progreso de hoy" suma los puntos de las partidas del día y los compara
+con la meta diaria (500 puntos).
 
-**Opción B — endpoint temporal**: visita una vez
-`https://tu-subdominio.infinityfreeapp.com/?generate-key=1` (requiere
-añadir esa ruta primero al `routes/web.php`).
-
-> 💡 Es más sencillo la Opción A. Solo tienes que hacerlo una vez.
-
-### 6. Permisos de carpetas (importante)
-
-Desde el File Manager, click derecho en estas carpetas y asegúrate de
-que tienen permisos **755** o **775**:
-
-- `htdocs/storage/` (y todas sus subcarpetas)
-- `htdocs/bootstrap/cache/`
-
-Si no, Laravel no puede escribir logs ni cache y dará error 500.
-
-### 7. Probar
-
-Abre **https://tu-subdominio.infinityfreeapp.com/public/**
-
-Deberías ver MentActiva con los 7 juegos. Si funciona, ¡listo! 🎉
-
-## URL: ¿con `/public/` o sin?
-
-InfinityFree no permite cambiar el **document root**. Por defecto:
-
-- URL del proyecto: `tudominio.infinityfreeapp.com/public/`
-
-Esto funciona pero queda feo. Hay dos formas de quitarlo:
-
-### Opción A — `.htaccess` redirect (la simple, ya incluida)
-
-El `.htaccess` de la raíz que viene con este proyecto redirige
-automáticamente de `tudominio.com/` a `tudominio.com/public/`.
-
-Sigue mostrando `/public/` en la URL pero al menos el usuario solo
-escribe la raíz. ✅ Esto **ya funciona** sin tocar nada.
-
-### Opción B — Mover `index.php` a la raíz (URL totalmente limpia)
-
-Es más laborioso pero deja la URL como `tudominio.com/actividades`:
-
-1. Copia `htdocs/public/index.php` a `htdocs/index.php`
-2. Copia `htdocs/public/.htaccess` a `htdocs/.htaccess` (sobrescribe el actual)
-3. Edita `htdocs/index.php` y cambia:
-   ```php
-   require __DIR__.'/../vendor/autoload.php';
-   ```
-   por:
-   ```php
-   require __DIR__.'/vendor/autoload.php';
-   ```
-   Y cambia también la línea de `bootstrap/app.php`:
-   ```php
-   $app = require_once __DIR__.'/../bootstrap/app.php';
-   ```
-   por:
-   ```php
-   $app = require_once __DIR__.'/bootstrap/app.php';
-   ```
-4. Mueve los assets de `htdocs/public/css/` a `htdocs/css/` (igual con `js/`)
-
-Es opcional. Solo hazlo si te molesta el `/public/` en la URL.
-
-## Resolución de problemas
-
-### Error 500 al abrir la web
-- Comprueba que `APP_KEY` está rellenada en `.env`
-- Comprueba permisos de `storage/` (755)
-- Activa temporalmente `APP_DEBUG=true` para ver el error específico
-- Mira `storage/logs/laravel.log` (puedes verlo desde el File Manager)
-
-### Error de conexión BD ("could not find driver")
-- Asegúrate de que `DB_CONNECTION=mysql` (no `sqlite`)
-- Comprueba que los datos del `.env` son correctos
-- Verifica en el panel que la BD existe
-
-### "Site can't be reached"
-- El subdominio de InfinityFree tarda unos minutos en propagarse tras crearse
-- Asegúrate de que estás usando `https://` (no `http://`)
-
-### Las tarjetas de los juegos no aparecen
-- Comprueba que importaste `install.sql` en phpMyAdmin
-- En phpMyAdmin, ejecuta `SELECT * FROM actividades;` — debe haber 7 filas
-
-## Actualizar el proyecto en producción
-
-Cuando hagas cambios en el código en tu PC:
-
-1. Comprueba que funcionan localmente
-2. Sube por FTP **solo los archivos cambiados** (no todo `vendor/`)
-3. Si modificas algo de PHP o vistas, borra el contenido de:
-   - `storage/framework/views/`
-   - `storage/framework/cache/`
-   - `bootstrap/cache/*.php` (deja el `.gitignore`)
-4. Si cambias la estructura de la BD (nueva migración), exporta el nuevo SQL
-   y reimpórtalo en phpMyAdmin
-
-## Estructura
+## Estructura del proyecto
 
 ```
-htdocs/                          ← la raíz tras subir todo
-├── .env                          ← creas en el servidor con datos MySQL
-├── .htaccess                     ← redirige a /public/
-├── app/                          ← código de la aplicación
-├── bootstrap/
-├── config/
+laravel/
+├── app/
+│   ├── Http/Controllers/        # Home, Actividades, Auth, Partida, Estado, Progreso
+│   │   └── Games/               # Un controlador por juego
+│   └── Models/                  # Actividad, User, Partida, GameState
 ├── database/
-│   └── install.sql               ← dump para phpMyAdmin (solo se usa una vez)
-├── public/                       ← punto de entrada Laravel
-│   ├── index.php
-│   ├── .htaccess
-│   ├── css/, js/                 ← tus assets
-├── resources/views/              ← Blade
-├── routes/
-├── storage/                      ← logs, cache (debe ser escribible)
-└── vendor/                       ← dependencias (~76 MB)
+│   ├── migrations/              # Esquema de las tablas
+│   ├── seeders/                 # Datos iniciales (una actividad por juego)
+│   └── install.sql              # Volcado SQL para importar en el hosting
+├── public/
+│   ├── css/                     # Estilos (uno por juego + estilos.css comunes)
+│   ├── js/                      # Lógica de cada juego (JavaScript puro)
+│   └── index.php                # Front controller de Laravel
+├── resources/views/
+│   ├── games/                   # Vistas de los 7 juegos + partials
+│   ├── auth/                    # Login y registro
+│   ├── layouts/app.blade.php    # Plantilla común
+│   ├── home.blade.php           # Inicio (bienvenida + progreso)
+│   ├── actividades.blade.php    # Listado de juegos + progreso
+│   └── progreso.blade.php       # Estadísticas del usuario
+└── routes/web.php               # Todas las rutas
 ```
 
-## Diferencias con la versión de desarrollo
+## Despliegue en InfinityFree
 
-| | Desarrollo (en tu PC) | Producción (InfinityFree) |
-|---|---|---|
-| BD | SQLite (archivo local) | MySQL (servicio del hosting) |
-| `.env` | `APP_DEBUG=true` | `APP_DEBUG=false` |
-| `vendor/` | NO en git (composer install) | SÍ subido por FTP |
-| Cache | Limpia manualmente | Limpia tras cada deploy |
-| Errores | Página amigable de Laravel | Página genérica + logs |
+1. Crea una base de datos MySQL en el panel y anota host, nombre, usuario y contraseña.
+2. En phpMyAdmin, importa `database/install.sql`.
+3. Sube el contenido del proyecto a `htdocs/` (por FTP o File Manager).
+4. Renombra `.env.example` a `.env` y rellena las credenciales de MySQL.
+5. Genera la clave en local con `php artisan key:generate --show` y pégala en `APP_KEY`.
+6. Pon `APP_DEBUG=false` y `APP_ENV=production`.
+7. Comprueba que la base de datos usa el juego de caracteres `utf8mb4`, para que se
+   vean bien los emojis de los iconos de los juegos.
 
----
+## Créditos
 
-**¿Problemas?** Comprueba en este orden:
-1. `storage/logs/laravel.log`
-2. `APP_DEBUG=true` temporalmente para ver el error
-3. Datos del `.env` (host, user, password)
-4. Permisos de `storage/`
+- Pictogramas: [ARASAAC](https://arasaac.org) — Gobierno de Aragón (autor: Sergio
+  Palao). Licencia CC BY-NC-SA.
+- Tipografías: Nunito y Baloo 2 (Google Fonts).
+
+## Licencia
+
+Proyecto académico desarrollado con fines educativos.
