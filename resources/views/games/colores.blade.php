@@ -93,5 +93,7 @@
     opciones:  {{ $config['opciones'] }},
   };
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'colores'])
+
 <script src="{{ asset('js/colores.js') }}" defer></script>
 @endpush

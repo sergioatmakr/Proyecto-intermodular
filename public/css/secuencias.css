@@ -641,11 +641,34 @@ body.sq-pagina-juego { height: 100vh; overflow: hidden; }
 .sq-atribucion a { color: var(--sq-acento); text-decoration: none; }
 .sq-atribucion a:hover { text-decoration: underline; }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .sq-pasos              { grid-template-columns: repeat(3, 1fr); }
+  .sq-practica-mezclados { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── Móvil (≤ 520px) ── */
 @media (max-width: 520px) {
-  .sq-pasos { grid-template-columns: repeat(2, 1fr); }
+  .sq-pasos              { grid-template-columns: repeat(2, 1fr); }
   .sq-practica-mezclados { grid-template-columns: repeat(2, 1fr); }
-  .sq-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .sq-juego-cabecera { gap: 8px; }
-  .sq-titulo-juego { width: 100%; order: -1; justify-content: flex-start; }
+  .sq-grid               { grid-template-columns: repeat(2, 1fr); }
+  .sq-juego-cabecera     { gap: 8px; flex-wrap: wrap; }
+  .sq-titulo-juego       { width: 100%; order: -1; justify-content: flex-start; }
+
+  /* Modal de gestión de secuencias a pantalla casi completa */
+  .sq-modal          { max-width: 100%; max-height: 94vh; }
+  .sq-resultados     { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); max-height: 220px; }
+  .sq-buscador       { flex-wrap: wrap; }
+  .sq-btn-buscar     { width: 100%; }
+  .sq-titulo-pantalla { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+}
+
+/* ── Móvil muy estrecho (≤ 360px) ── */
+@media (max-width: 360px) {
+  .sq-pasos              { grid-template-columns: repeat(2, 1fr); }
+  .sq-grid               { grid-template-columns: repeat(2, 1fr); }
 }
