@@ -25,7 +25,9 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('0001_01_01_000000_create_users_table', 1),
 ('0001_01_01_000001_create_cache_table', 1),
 ('0001_01_01_000002_create_jobs_table', 1),
-('2026_05_17_181706_create_actividades_table', 1);
+('2026_05_17_181706_create_actividades_table', 1),
+('2026_05_19_000001_create_partidas_table', 1),
+('2026_05_21_000001_create_game_states_table', 1);
 
 -- ── Tabla `users` (Laravel base) ────────────────────────────────────
 CREATE TABLE IF NOT EXISTS `users` (
@@ -144,6 +146,43 @@ INSERT INTO `actividades` (`slug`, `icono`, `tag`, `titulo`, `descripcion`, `tie
 ('puzzle',      '🧩', 'Espacial',       'Puzzle',                      'Arma rompecabezas con tus propias fotos. Elige 6, 9 o 12 piezas según la dificultad.',                                            '~5 min', 'Adaptable',    'juego.puzzle',      'btn-naranja', 50, 1, NOW(), NOW()),
 ('tres-raya',   '🎯', 'Estrategia',     'Tres en Raya',                'Juega contra la máquina al clásico tres en raya. Ideal para una partida rápida.',                                                 '~2 min', 'Nivel básico', 'juego.tres-raya',   'btn-verde',   60, 1, NOW(), NOW()),
 ('sopa',        '🔤', 'Lenguaje',       'Sopa de Letras',              'Encuentra palabras escondidas entre las letras. Personaliza la lista con tus propias palabras.',                                  '~5 min', 'Adaptable',    'juego.sopa',        'btn-naranja', 70, 1, NOW(), NOW());
+
+-- ── Tabla `partidas` (Nivel 2: registro de juegos por usuario) ─────
+CREATE TABLE IF NOT EXISTS `partidas` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT UNSIGNED NOT NULL,
+  `slug` VARCHAR(60) NOT NULL,
+  `actividad_id` BIGINT UNSIGNED DEFAULT NULL,
+  `puntos` INT NOT NULL DEFAULT 0,
+  `duracion_seg` INT DEFAULT NULL,
+  `datos` JSON DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `partidas_user_id_slug_index` (`user_id`, `slug`),
+  KEY `partidas_slug_puntos_index` (`slug`, `puntos`),
+  KEY `partidas_actividad_id_foreign` (`actividad_id`),
+  CONSTRAINT `partidas_user_id_foreign` FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `partidas_actividad_id_foreign` FOREIGN KEY (`actividad_id`)
+    REFERENCES `actividades` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── Tabla `game_states` (estado de cada juego por usuario) ─────────
+-- Sustituye al localStorage: temas de imágenes, palabras de sopa,
+-- secuencias custom, fotos del puzzle, marcador de tres en raya.
+CREATE TABLE IF NOT EXISTS `game_states` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT UNSIGNED NOT NULL,
+  `slug` VARCHAR(60) NOT NULL,
+  `datos` JSON DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `game_states_user_id_slug_unique` (`user_id`, `slug`),
+  CONSTRAINT `game_states_user_id_foreign` FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS=1;
 

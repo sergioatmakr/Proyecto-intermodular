@@ -186,6 +186,14 @@
     cgFinPuntos.textContent  = cgPuntos;
     cgFinMensaje.textContent = mensaje;
     cgPantallaFin.classList.remove('cg-pantalla-inicio--oculta');
+
+    // ── Nivel 2: guardar partida si hay sesión ──
+    if (window.MentActiva?.guardarPartida) {
+      window.MentActiva.guardarPartida({
+        puntos: cgPuntos,
+        datos:  { rondas: CG_MAX_RONDAS, porcentaje },
+      });
+    }
   }
 
   // ── Nueva ronda ────────────────────────────────────────────
