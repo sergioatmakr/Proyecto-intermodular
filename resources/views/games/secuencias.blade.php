@@ -150,5 +150,8 @@
     arasaac:    @json($arasaac),
   };
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'secuencias'])
+@include('games._partial_estado', ['slug' => 'secuencias'])
+
 <script src="{{ asset('js/secuencias.js') }}" defer></script>
 @endpush
