@@ -88,5 +88,9 @@
     maxRondas: {{ $config['max_rondas'] }},
   };
 </script>
+
+{{-- Helper de guardado de partida (solo guarda si el usuario está logueado) --}}
+@include('games._partial_guardar_partida', ['slug' => 'matematicas'])
+
 <script src="{{ asset('js/matematicas.js') }}" defer></script>
 @endpush

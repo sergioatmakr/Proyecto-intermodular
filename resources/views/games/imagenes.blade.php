@@ -176,5 +176,8 @@
     opciones:  {{ $config['opciones'] }},
   };
 </script>
+@include('games._partial_guardar_partida', ['slug' => 'imagenes'])
+@include('games._partial_estado', ['slug' => 'imagenes'])
+
 <script src="{{ asset('js/imagenes.js') }}" defer></script>
 @endpush

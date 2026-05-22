@@ -63,6 +63,7 @@
   align-items: center;
   gap: 20px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  margin-bottom: 20px;
 }
 
 .mg-pregunta {
@@ -145,6 +146,11 @@
   box-shadow: 0 4px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
   transition: transform 0.08s, box-shadow 0.08s;
   cursor: pointer;
+}
+.mg-teclado .mg-tecla:not(.mg-tecla--borrar):not(.mg-tecla--ok) {
+  height: 76px;
+  min-width: 78px;
+  font-size: 1.8rem;
 }
 .mg-tecla:active {
   transform: translateY(3px);
@@ -298,4 +304,59 @@
   color: #003d2e;
   box-shadow: 0 4px 14px rgba(6,214,160,0.35), 0 4px 0 #038a64;
   transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — tablet y móvil
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .mg-contenedor          { max-width: 440px; }
+  .mg-operacion-container { padding: 1.5rem; }
+  .mg-ecuacion            { gap: 10px; }
+  .mg-ecuacion .mg-input-resultado { width: 160px; min-width: 0; }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+  .mg-area                { padding: 0.6rem; }
+  .mg-contenedor          { gap: 12px; }
+  .mg-operacion-container { padding: 1rem; gap: 14px; }
+
+  .mg-pregunta { font-size: clamp(1.8rem, 9vw, 2.4rem); }
+
+  /* La ecuación pasa a columna para que no se desborde */
+  .mg-ecuacion { gap: 6px; flex-wrap: wrap; }
+  .mg-ecuacion .mg-input-resultado {
+    width: 130px;
+    min-width: 0;
+    font-size: clamp(1.8rem, 9vw, 2.4rem);
+  }
+  .mg-igual { font-size: 1.6rem; }
+
+  .mg-teclado { gap: 8px; width: 150%; }
+  .mg-tecla   { height: 52px; font-size: 1.15rem; }
+  .mg-teclado .mg-tecla:not(.mg-tecla--borrar):not(.mg-tecla--ok) {
+    height: 72px;
+    min-width: 0;
+    font-size: 1.75rem;
+  }
+  .mg-tecla--borrar { font-size: 1.25rem; }
+
+  .cg-estadisticas      { gap: 8px; }
+  .cg-estadistica       { padding: 8px 14px; min-width: 64px; }
+  .cg-estadistica__valor { font-size: 1.4rem; }
+}
+
+/* ── Pantalla baja (móvil apaisado) ── */
+@media (max-height: 640px) {
+  .mg-titulo              { display: none; }
+  .mg-contenedor          { gap: 8px; }
+  .mg-operacion-container { padding: 12px; gap: 10px; }
+  .mg-tecla               { height: 52px; }
+  .mg-teclado .mg-tecla:not(.mg-tecla--borrar):not(.mg-tecla--ok) {
+    height: 68px;
+    font-size: 1.65rem;
+  }
 }

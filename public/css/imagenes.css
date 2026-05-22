@@ -904,9 +904,29 @@ body.ig-pagina-juego {
   .ig-emoji         { font-size: 1.8rem; }
 }
 
-@media (max-width: 420px) {
-  .ig-cuadricula    { gap: 8px; }
-  .ig-tarjeta-juego { padding: 12px 10px; }
-  .ig-estadisticas  { gap: 10px; padding: 7px 14px; }
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .ig-contenedor   { max-width: 480px; }
+  .ig-palabra-texto { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+}
+
+/* ── Móvil (≤ 480px) ── */
+@media (max-width: 480px) {
+  .ig-cuadricula    { gap: 10px; }
+  .ig-tarjeta-juego { padding: 14px 12px; }
+  .ig-estadisticas  { gap: 10px; padding: 8px 16px; }
   .ig-lista-temas   { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .ig-palabra-contenedor { padding: 12px 16px; }
+  .ig-palabra-texto { font-size: clamp(1.5rem, 8vw, 2.1rem); letter-spacing: 2px; }
+  .ig-emoji         { font-size: clamp(2.6rem, 14vw, 4rem); }
+
+  /* Modal de gestión de imágenes ocupa casi toda la pantalla */
+  .ig-modal         { max-width: 100%; max-height: 92vh; }
+  .ig-modal__grid   { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  .ig-temas-titulo  { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+}
+
+/* ── Móvil muy estrecho (≤ 360px) ── */
+@media (max-width: 360px) {
+  .ig-lista-temas { grid-template-columns: repeat(2, 1fr); }
 }

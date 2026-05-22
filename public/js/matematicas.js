@@ -81,6 +81,14 @@
     } else {
       if (finPuntos) finPuntos.textContent = puntos;
       pantallaFin?.classList.remove('mg-oculto');
+
+      // ── Nivel 2: guardar partida en BD si hay sesión ──
+      if (window.MentActiva?.guardarPartida) {
+        window.MentActiva.guardarPartida({
+          puntos: puntos,
+          datos:  { rondas: MAX_RONDAS },
+        });
+      }
     }
   };
 

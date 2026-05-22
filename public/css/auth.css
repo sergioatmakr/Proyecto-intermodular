@@ -1,0 +1,325 @@
+/* ============================================================
+   auth.css — Estilos de login, registro y progreso de usuario
+   ============================================================ */
+
+/* ── Acciones del header (login / logout / saludo) ─────── */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.user-saludo {
+  color: #a7a9be;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.btn-link {
+  background: #4f6ef7;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 50px;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+  display: inline-block;
+}
+
+.btn-link:hover { 
+  filter: brightness(1.08);
+  background: linear-gradient(135deg, #4f6ef7, #43e8c8);
+}
+
+.btn-link--primary {
+  background: #4f6ef7;
+  color: #fff;
+  border-color: transparent;
+}
+.btn-link--primary:hover {
+  filter: brightness(1.08);
+  background: linear-gradient(135deg, #4f6ef7, #43e8c8);
+}
+
+/* ── Flash messages ───────────────────────────────────── */
+.flash-msg {
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+}
+.flash-msg--ok { background: rgba(6,214,160,0.15); color: #06d6a0; }
+
+/* ── Pantallas de auth ────────────────────────────────── */
+.auth-area {
+  flex: 1;
+  min-height: 0;
+  background: #0f0e17;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vh, 3rem) 1rem;
+  overflow-y: auto;
+}
+
+.auth-card {
+  background: #211f35;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: clamp(24px, 4vh, 36px) clamp(20px, 4vw, 36px);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+.auth-card__titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  text-align: center;
+  background: linear-gradient(135deg, #06d6a0, #6b9eff, #a06bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.auth-card__subtitulo {
+  color: #a7a9be;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-top: -8px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.auth-label > span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #a7a9be;
+}
+
+.auth-input {
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.auth-input:focus { border-color: #6b9eff; background: rgba(255,255,255,0.09); }
+.auth-input::placeholder { color: rgba(255,255,255,0.3); }
+
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #a7a9be;
+  cursor: pointer;
+}
+.auth-checkbox input { cursor: pointer; }
+
+.auth-error {
+  background: rgba(255,71,87,0.12);
+  border: 1px solid rgba(255,71,87,0.3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #ff6b6b;
+  font-size: 0.88rem;
+}
+.auth-error p { margin: 4px 0; }
+
+.auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+  text-decoration: none;
+  margin-top: 6px;
+}
+.auth-btn--primary {
+  background: linear-gradient(135deg, #06d6a0, #43e8c8);
+  color: #003d2e;
+  box-shadow: 0 4px 14px rgba(6,214,160,0.35), 0 4px 0 #038a64;
+}
+.auth-btn--primary:hover  { transform: translateY(-2px); filter: brightness(1.07); }
+.auth-btn--primary:active { transform: translateY(3px); box-shadow: 0 1px 0 #038a64; }
+
+.auth-link {
+  color: #a7a9be;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.auth-link a {
+  color: #6b9eff;
+  text-decoration: none;
+  font-weight: 800;
+}
+.auth-link a:hover { text-decoration: underline; }
+
+/* ── Página de progreso ───────────────────────────────── */
+.progreso-wrapper {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.progreso-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.progreso-stat {
+  background: #211f35;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 20px 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+.progreso-stat__valor {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  background: linear-gradient(135deg, #06d6a0, #ffd166);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.progreso-stat__label {
+  color: #a7a9be;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 6px;
+}
+
+.progreso-bloque {
+  background: #211f35;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.progreso-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.progreso-juegos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.progreso-juego {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.progreso-juego__icono { font-size: 2rem; line-height: 1; }
+.progreso-juego__nombre {
+  font-weight: 800;
+  color: white;
+  font-size: 0.95rem;
+  flex: 1;
+}
+.progreso-juego__datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.78rem;
+  color: #a7a9be;
+  text-align: right;
+}
+.progreso-juego__datos strong { color: white; }
+
+.progreso-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+}
+.progreso-tabla th,
+.progreso-tabla td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.progreso-tabla th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a7a9be;
+  font-weight: 800;
+}
+.progreso-tabla td { font-size: 0.92rem; }
+.progreso-tabla tr:hover td { background: rgba(255,255,255,0.03); }
+
+.progreso-vacio {
+  background: #211f35;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.progreso-vacio__emoji { font-size: 3rem; }
+.progreso-vacio h2 { color: white; font-family: 'Fredoka One', cursive; font-size: 1.3rem; }
+.progreso-vacio p { color: #a7a9be; max-width: 320px; }
+.progreso-vacio .auth-btn { margin-top: 14px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .progreso-stats { grid-template-columns: 1fr; gap: 10px; }
+  .progreso-tabla { font-size: 0.82rem; }
+  .progreso-tabla th, .progreso-tabla td { padding: 8px 6px; }
+  .user-actions { gap: 8px; }
+  .user-saludo  { display: none; }
+}
