@@ -28,21 +28,22 @@
   let igTemaEditando = null;
   let igCurrentSrc   = '';   // src en preparación (data URL, URL o emoji)
 
-  // ── Persistencia en localStorage ───────────────────────────
+  // ── Persistencia en BD (vía window.MentActiva) ─────────────
   function igCargarTemas() {
-    try {
-      const guardado = localStorage.getItem('ig_temas_state');
-      if (guardado) return JSON.parse(guardado);
-    } catch (e) {}
+    const e = window.MentActiva && window.MentActiva.cargarEstado
+      ? window.MentActiva.cargarEstado() : null;
+    if (e && Array.isArray(e) && e.length) return e;
     return JSON.parse(JSON.stringify(IG_TEMAS_INICIALES));
   }
 
   function igGuardarTemas() {
-    localStorage.setItem('ig_temas_state', JSON.stringify(igTemas));
+    if (window.MentActiva && window.MentActiva.guardarEstado) {
+      window.MentActiva.guardarEstado(igTemas);
+    }
   }
 
   function igGuardarTemasSeguro() {
-    try { igGuardarTemas(); } catch (e) {}
+    igGuardarTemas();
   }
 
   // ── Detección de tipo de src ───────────────────────────────
@@ -558,6 +559,14 @@
     igFinPuntos.textContent  = igPuntos;
     igFinMensaje.textContent = msg;
     igPantallaFin.classList.remove('ig-pantalla--oculta');
+
+    // ── Nivel 2: guardar partida si hay sesión ──
+    if (window.MentActiva?.guardarPartida) {
+      window.MentActiva.guardarPartida({
+        puntos: igPuntos,
+        datos:  { rondas: IG_MAX_RONDAS, porcentaje: pct },
+      });
+    }
   }
 
   // ── Utilidades de escape ───────────────────────────────────
